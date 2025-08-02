@@ -32,15 +32,6 @@ tailwind.config = {
       fontFamily: {
         'orbitron': ['Orbitron', 'monospace'],
         'pacifico': ['Pacifico', 'serif']
-      },
-      transitionProperty: {
-        'all': 'all',
-      },
-      transitionDuration: {
-        '400': '400ms',
-      },
-      transitionTimingFunction: {
-        'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
       }
     }
   }
@@ -54,7 +45,6 @@ body {
   background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d1b69 100%);
   min-height: 100vh;
   overflow-x: hidden;
-  scroll-behavior: smooth;
 }
 .neon-glow {
   box-shadow: 0 0 20px rgba(87, 181, 231, 0.5), 0 0 40px rgba(87, 181, 231, 0.3), 0 0 60px rgba(87, 181, 231, 0.1);
@@ -66,7 +56,7 @@ body {
   background: linear-gradient(135deg, rgba(87, 181, 231, 0.1) 0%, rgba(141, 211, 199, 0.1) 100%);
   border: 1px solid rgba(87, 181, 231, 0.3);
   backdrop-filter: blur(10px);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
 }
 .hologram-card:hover {
   transform: translateY(-10px) scale(1.02);
@@ -92,7 +82,7 @@ body {
   100% { transform: translateY(0px); }
 }
 .filter-tab {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
 }
 .filter-tab.active {
   background: linear-gradient(135deg, rgba(87, 181, 231, 0.3) 0%, rgba(141, 211, 199, 0.3) 100%);
@@ -102,7 +92,7 @@ body {
 .type-card {
   opacity: 1;
   transform: scale(1);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s ease;
 }
 .type-card.hidden {
   opacity: 0;
@@ -113,72 +103,20 @@ body {
   background: rgba(15, 15, 35, 0.8);
   border: 1px solid rgba(87, 181, 231, 0.3);
   backdrop-filter: blur(10px);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .search-input:focus {
   border-color: rgba(87, 181, 231, 0.8);
   box-shadow: 0 0 20px rgba(87, 181, 231, 0.2);
 }
-
-/* Enhanced glowing effects */
-.enhanced-glow {
-  box-shadow: 0 0 15px rgba(87, 181, 231, 0.7), 
-              0 0 30px rgba(87, 181, 231, 0.5), 
-              0 0 45px rgba(87, 181, 231, 0.3);
-  transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.enhanced-glow:hover {
-  box-shadow: 0 0 20px rgba(87, 181, 231, 0.9), 
-              0 0 40px rgba(87, 181, 231, 0.7), 
-              0 0 60px rgba(87, 181, 231, 0.5);
-}
-
-.text-glow {
-  text-shadow: 0 0 8px rgba(87, 181, 231, 0.9), 
-               0 0 16px rgba(87, 181, 231, 0.7), 
-               0 0 24px rgba(87, 181, 231, 0.5);
-  transition: text-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.text-glow:hover {
-  text-shadow: 0 0 12px rgba(87, 181, 231, 1), 
-               0 0 24px rgba(87, 181, 231, 0.8), 
-               0 0 36px rgba(87, 181, 231, 0.6);
-}
-
-/* Smooth page load animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.page-load {
-  animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-/* Smooth transitions for all elements */
-* {
-  transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Smooth scrolling fix */
-html {
-  scroll-behavior: smooth;
-}
 </style>
 </head>
-<body class="font-orbitron text-white page-load">
+<body class="font-orbitron text-white">
 <div class="particle-bg"></div>
 <nav class="fixed top-0 w-full z-50 bg-black/20 backdrop-blur-lg border-b border-primary/20">
   <div class="max-w-7xl mx-auto px-6 py-4">
     <div class="flex items-center justify-between">
       <div class="flex items-center space-x-6">
-        <div class="text-2xl font-bold neon-text font-pacifico text-glow">MBTI Universe</div>
+        <div class="text-2xl font-bold neon-text font-pacifico">MBTI Universe</div>
         <a href="index.html" data-readdy="true" class="flex items-center space-x-2 text-gray-300 hover:text-primary transition-colors">
           <i class="ri-arrow-left-line w-5 h-5 flex items-center justify-center"></i>
           <span>Back to Home</span>
@@ -193,7 +131,7 @@ html {
           </div>
         </div>
       </div>
-      <button class="md:hidden w-6 h-6 flex items-center justify-center enhanced-glow">
+      <button class="md:hidden w-6 h-6 flex items-center justify-center">
         <i class="ri-menu-line text-xl"></i>
       </button>
     </div>
@@ -202,26 +140,26 @@ html {
 <section class="pt-32 pb-12 px-6">
   <div class="max-w-7xl mx-auto">
     <div class="text-center mb-12">
-      <h1 class="text-5xl font-black mb-6 neon-text text-glow">All 16 Hero Classes</h1>
+      <h1 class="text-5xl font-black mb-6 neon-text">All 16 Hero Classes</h1>
       <p class="text-xl text-gray-300 max-w-3xl mx-auto">
         Explore every personality type in the MBTI Universe. Each hero class possesses unique superpowers,
         rules their own cosmic domain, and plays a vital role in the universal balance.
       </p>
     </div>
     <div class="flex flex-wrap justify-center gap-4 mb-12">
-      <button class="filter-tab active px-6 py-3 rounded-button border border-primary/30 text-sm font-semibold whitespace-nowrap enhanced-glow" data-filter="all">
+      <button class="filter-tab active px-6 py-3 rounded-button border border-primary/30 text-sm font-semibold whitespace-nowrap" data-filter="all">
         All Types
       </button>
-      <button class="filter-tab px-6 py-3 rounded-button border border-primary/30 text-sm font-semibold whitespace-nowrap enhanced-glow" data-filter="NT">
+      <button class="filter-tab px-6 py-3 rounded-button border border-primary/30 text-sm font-semibold whitespace-nowrap" data-filter="NT">
         NT - Analysts
       </button>
-      <button class="filter-tab px-6 py-3 rounded-button border border-primary/30 text-sm font-semibold whitespace-nowrap enhanced-glow" data-filter="NF">
+      <button class="filter-tab px-6 py-3 rounded-button border border-primary/30 text-sm font-semibold whitespace-nowrap" data-filter="NF">
         NF - Diplomats
       </button>
-      <button class="filter-tab px-6 py-3 rounded-button border border-primary/30 text-sm font-semibold whitespace-nowrap enhanced-glow" data-filter="SP">
+      <button class="filter-tab px-6 py-3 rounded-button border border-primary/30 text-sm font-semibold whitespace-nowrap" data-filter="SP">
         SP - Explorers
       </button>
-      <button class="filter-tab px-6 py-3 rounded-button border border-primary/30 text-sm font-semibold whitespace-nowrap enhanced-glow" data-filter="SJ">
+      <button class="filter-tab px-6 py-3 rounded-button border border-primary/30 text-sm font-semibold whitespace-nowrap" data-filter="SJ">
         SJ - Sentinels
       </button>
     </div>
@@ -230,8 +168,8 @@ html {
 <section class="pb-20 px-6">
   <div class="max-w-7xl mx-auto">
     <div id="typesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      <!-- All your type cards remain exactly the same -->
-      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer enhanced-glow" data-type="INTJ" data-group="NT">
+      <!-- INTJ -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="INTJ" data-group="NT">
         <div class="aspect-square mb-4 rounded-xl overflow-hidden">
           <img src="https://readdy.ai/api/search-image?query=mystical%20white%20arctic%20fox%20with%20glowing%20blue%20eyes%2C%20cosmic%20neural%20networks%20surrounding%2C%20ethereal%20ice%20crystals%2C%20strategic%20and%20calculating%20presence%2C%20digital%20holographic%20effects%2C%20neon%20blue%20lighting%2C%20sci-fi%20fantasy%20aesthetic%2C%20elegant%20and%20mysterious&width=300&height=300&seq=intj4&orientation=squarish"
             alt="INTJ Strategist" class="w-full h-full object-cover object-top">
@@ -258,8 +196,441 @@ html {
           </div>
         </div>
       </div>
-      <!-- Rest of your type cards remain exactly the same -->
-      <!-- ... (all other type cards) ... -->
+
+      <!-- INTP -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="INTP" data-group="NT">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden">
+          <img src="https://readdy.ai/api/search-image?query=female%20scientist%20character%20with%20holographic%20screens%2C%20floating%20mathematical%20equations%2C%20precise%20technological%20elements%2C%20analytical%20expression%2C%20teal%20energy%20patterns%2C%20systematic%20geometric%20designs%2C%20futuristic%20laboratory%20setting&width=300&height=300&seq=intp3&orientation=squarish"
+            alt="INTP Architect" class="w-full h-full object-cover object-top">
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-secondary">INTP</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Architect</h4>
+          <div class="text-sm text-gray-400 mb-4 space-y-1">
+            <p>• Theoretical framework builder</p>
+            <p>• Logical problem solver</p>
+            <p>• Innovation catalyst</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-secondary font-medium block mb-1">Planet Logic</span>
+            <p class="text-xs text-gray-500">A world of floating equations and pure concepts</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Superpower</span>
+            <p class="text-xs text-gray-400">Conceptual Analysis - Deconstructs complex systems</p>
+          </div>
+          <div class="flex flex-wrap gap-1 justify-center">
+            <span class="text-xs px-2 py-1 bg-primary/20 rounded text-primary">ENTJ</span>
+            <span class="text-xs px-2 py-1 bg-secondary/20 rounded text-secondary">INFJ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENTJ -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="ENTJ" data-group="NT">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden">
+          <img src="https://readdy.ai/api/search-image?query=majestic%20golden%20lion%20with%20cosmic%20crown%2C%20commanding%20presence%2C%20leadership%20aura%2C%20powerful%20stance%2C%20royal%20purple%20energy%20patterns%2C%20strategic%20battlefield%20background%2C%20authoritative%20and%20noble%20design&width=300&height=300&seq=entj3&orientation=squarish"
+            alt="ENTJ Commander" class="w-full h-full object-cover object-top">
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-orange-400">ENTJ</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Commander</h4>
+          <div class="text-sm text-gray-400 mb-4 space-y-1">
+            <p>• Natural born leader</p>
+            <p>• Strategic executor</p>
+            <p>• Efficiency optimizer</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-orange-400 font-medium block mb-1">Planet Authority</span>
+            <p class="text-xs text-gray-500">A fortress world of order and achievement</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Superpower</span>
+            <p class="text-xs text-gray-400">Executive Command - Mobilizes massive resources</p>
+          </div>
+          <div class="flex flex-wrap gap-1 justify-center">
+            <span class="text-xs px-2 py-1 bg-primary/20 rounded text-primary">INFP</span>
+            <span class="text-xs px-2 py-1 bg-secondary/20 rounded text-secondary">INTP</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENTP -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="ENTP" data-group="NT">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden">
+          <img src="https://readdy.ai/api/search-image?query=female%20inventor%20character%20with%20electric%20blue%20energy%20sparks%2C%20dynamic%20floating%20gadgets%2C%20creative%20chaos%20swirling%2C%20innovative%20laboratory%20setting%2C%20idea%20generation%20effects%2C%20intellectual%20lightning%2C%20steampunk%20elements&width=300&height=300&seq=entp3&orientation=squarish"
+            alt="ENTP Debater" class="w-full h-full object-cover object-top">
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-purple-400">ENTP</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Debater</h4>
+          <div class="text-sm text-gray-400 mb-4 space-y-1">
+            <p>• Innovative idea generator</p>
+            <p>• Quick-witted challenger</p>
+            <p>• Possibility explorer</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-purple-400 font-medium block mb-1">Planet Innovation</span>
+            <p class="text-xs text-gray-500">A realm of endless experiments and debates</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Superpower</span>
+            <p class="text-xs text-gray-400">Idea Synthesis - Connects unrelated concepts</p>
+          </div>
+          <div class="flex flex-wrap gap-1 justify-center">
+            <span class="text-xs px-2 py-1 bg-primary/20 rounded text-primary">INFJ</span>
+            <span class="text-xs px-2 py-1 bg-secondary/20 rounded text-secondary">INTJ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFJ -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="INFJ" data-group="NF">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden">
+          <img src="https://readdy.ai/api/search-image?query=wise%20mystical%20owl%20with%20ethereal%20purple%20aura%2C%20protective%20energy%20wings%2C%20spiritual%20symbols%20floating%2C%20healing%20light%20effects%2C%20starry%20night%20background%2C%20guardian%20of%20wisdom%20aesthetic&width=300&height=300&seq=infj3&orientation=squarish"
+            alt="INFJ Advocate" class="w-full h-full object-cover object-top">
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-indigo-400">INFJ</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Advocate</h4>
+          <div class="text-sm text-gray-400 mb-4 space-y-1">
+            <p>• Idealistic visionary</p>
+            <p>• Empathetic counselor</p>
+            <p>• Purpose-driven activist</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-indigo-400 font-medium block mb-1">Planet Serenity</span>
+            <p class="text-xs text-gray-500">A peaceful world of meditation gardens</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Superpower</span>
+            <p class="text-xs text-gray-400">Intuitive Insight - Sees people's true potential</p>
+          </div>
+          <div class="flex flex-wrap gap-1 justify-center">
+            <span class="text-xs px-2 py-1 bg-primary/20 rounded text-primary">ENTP</span>
+            <span class="text-xs px-2 py-1 bg-secondary/20 rounded text-secondary">ENFP</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFP -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="INFP" data-group="NF">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden">
+          <img src="https://readdy.ai/api/search-image?query=female%20druid%20character%20with%20flowing%20nature%20robes%2C%20gentle%20expression%2C%20floating%20forest%20elements%2C%20harmony%20symbols%2C%20rainbow%20healing%20energy%2C%20woodland%20creatures%2C%20compassionate%20magical%20design&width=300&height=300&seq=infp3&orientation=squarish"
+            alt="INFP Mediator" class="w-full h-full object-cover object-top">
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-teal-400">INFP</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Mediator</h4>
+          <div class="text-sm text-gray-400 mb-4 space-y-1">
+            <p>• Values-driven idealist</p>
+            <p>• Creative expression master</p>
+            <p>• Authentic self-advocate</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-teal-400 font-medium block mb-1">Planet Harmony</span>
+            <p class="text-xs text-gray-500">A world of artistic beauty and personal truth</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Superpower</span>
+            <p class="text-xs text-gray-400">Emotional Healing - Restores inner peace</p>
+          </div>
+          <div class="flex flex-wrap gap-1 justify-center">
+            <span class="text-xs px-2 py-1 bg-primary/20 rounded text-primary">ENTJ</span>
+            <span class="text-xs px-2 py-1 bg-secondary/20 rounded text-secondary">ENFJ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENFJ -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="ENFJ" data-group="NF">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden">
+          <img src="https://readdy.ai/api/search-image?query=majestic%20dolphin%20pod%20leader%20with%20golden%20empowerment%20aura%2C%20guiding%20light%20trails%2C%20team%20coordination%20energy%2C%20mentorship%20symbols%2C%20ocean%20wisdom%20effects%2C%20inspiring%20presence&width=300&height=300&seq=enfj3&orientation=squarish"
+            alt="ENFJ Protagonist" class="w-full h-full object-cover object-top">
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-pink-400">ENFJ</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Protagonist</h4>
+          <div class="text-sm text-gray-400 mb-4 space-y-1">
+            <p>• Charismatic mentor</p>
+            <p>• People development expert</p>
+            <p>• Inspirational leader</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-pink-400 font-medium block mb-1">Planet Growth</span>
+            <p class="text-xs text-gray-500">A nurturing world of learning and development</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Superpower</span>
+            <p class="text-xs text-gray-400">Potential Awakening - Unlocks others' abilities</p>
+          </div>
+          <div class="flex flex-wrap gap-1 justify-center">
+            <span class="text-xs px-2 py-1 bg-primary/20 rounded text-primary">INFP</span>
+            <span class="text-xs px-2 py-1 bg-secondary/20 rounded text-secondary">ISFP</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENFP -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="ENFP" data-group="NF">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden">
+          <img src="https://readdy.ai/api/search-image?query=female%20performer%20character%20with%20vibrant%20rainbow%20energy%2C%20floating%20musical%20notes%2C%20creative%20inspiration%20sparks%2C%20dynamic%20dance%20pose%2C%20joyful%20expression%2C%20artistic%20stage%20presence&width=300&height=300&seq=enfp3&orientation=squarish"
+            alt="ENFP Campaigner" class="w-full h-full object-cover object-top">
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-yellow-400">ENFP</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Campaigner</h4>
+          <div class="text-sm text-gray-400 mb-4 space-y-1">
+            <p>• Enthusiastic motivator</p>
+            <p>• Creative possibility finder</p>
+            <p>• People connection catalyst</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Planet Inspiration</span>
+            <p class="text-xs text-gray-500">A vibrant world of endless possibilities</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Superpower</span>
+            <p class="text-xs text-gray-400">Enthusiasm Contagion - Spreads infectious energy</p>
+          </div>
+          <div class="flex flex-wrap gap-1 justify-center">
+            <span class="text-xs px-2 py-1 bg-primary/20 rounded text-primary">INTJ</span>
+            <span class="text-xs px-2 py-1 bg-secondary/20 rounded text-secondary">INFJ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ISTJ -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="ISTJ" data-group="SJ">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden">
+          <img src="https://readdy.ai/api/search-image?query=precise%20clockwork%20mechanical%20bee%20with%20structured%20golden%20patterns%2C%20systematic%20honeycomb%20background%2C%20organizational%20efficiency%2C%20methodical%20working%20style%2C%20dependable%20aura&width=300&height=300&seq=istj3&orientation=squarish"
+            alt="ISTJ Logistician" class="w-full h-full object-cover object-top">
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-blue-600">ISTJ</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Logistician</h4>
+          <div class="text-sm text-gray-400 mb-4 space-y-1">
+            <p>• Systematic organizer</p>
+            <p>• Reliable executor</p>
+            <p>• Traditional guardian</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-blue-600 font-medium block mb-1">Planet Order</span>
+            <p class="text-xs text-gray-500">A perfectly structured world of efficiency</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Superpower</span>
+            <p class="text-xs text-gray-400">System Optimization - Creates perfect processes</p>
+          </div>
+          <div class="flex flex-wrap gap-1 justify-center">
+            <span class="text-xs px-2 py-1 bg-primary/20 rounded text-primary">ESFP</span>
+            <span class="text-xs px-2 py-1 bg-secondary/20 rounded text-secondary">ENFP</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ISFJ -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="ISFJ" data-group="SJ">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden">
+          <img src="https://readdy.ai/api/search-image?query=female%20guardian%20character%20with%20protective%20crystal%20shield%2C%20nurturing%20healing%20aura%2C%20warm%20motherly%20presence%2C%20caring%20expression%2C%20defensive%20magic%2C%20community%20protection%20symbols&width=300&height=300&seq=isfj3&orientation=squarish"
+            alt="ISFJ Protector" class="w-full h-full object-cover object-top">
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-green-400">ISFJ</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Protector</h4>
+          <div class="text-sm text-gray-400 mb-4 space-y-1">
+            <p>• Caring supporter</p>
+            <p>• Harmony maintainer</p>
+            <p>• Service-oriented helper</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-green-400 font-medium block mb-1">Planet Sanctuary</span>
+            <p class="text-xs text-gray-500">A safe haven of comfort and care</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Superpower</span>
+            <p class="text-xs text-gray-400">Protective Shield - Guards others from harm</p>
+          </div>
+          <div class="flex flex-wrap gap-1 justify-center">
+            <span class="text-xs px-2 py-1 bg-primary/20 rounded text-primary">ESTP</span>
+            <span class="text-xs px-2 py-1 bg-secondary/20 rounded text-secondary">ESFP</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESTJ -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="ESTJ" data-group="SJ">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden">
+          <img src="https://readdy.ai/api/search-image?query=organized%20beaver%20architect%20with%20efficiency%20tools%2C%20leadership%20presence%2C%20dam%20construction%20plans%2C%20systematic%20work%20patterns%2C%20management%20symbols%2C%20authoritative%20stance&width=300&height=300&seq=estj3&orientation=squarish"
+            alt="ESTJ Executive" class="w-full h-full object-cover object-top">
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-red-600">ESTJ</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Executive</h4>
+          <div class="text-sm text-gray-400 mb-4 space-y-1">
+            <p>• Efficient administrator</p>
+            <p>• Results-focused leader</p>
+            <p>• Traditional organizer</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-red-600 font-medium block mb-1">Planet Efficiency</span>
+            <p class="text-xs text-gray-500">A world of perfect management systems</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Superpower</span>
+            <p class="text-xs text-gray-400">Resource Coordination - Maximizes team output</p>
+          </div>
+          <div class="flex flex-wrap gap-1 justify-center">
+            <span class="text-xs px-2 py-1 bg-primary/20 rounded text-primary">ISFP</span>
+            <span class="text-xs px-2 py-1 bg-secondary/20 rounded text-secondary">INFP</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESFJ -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="ESFJ" data-group="SJ">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden">
+          <img src="https://readdy.ai/api/search-image?query=female%20community%20leader%20with%20floating%20heart%20symbols%2C%20welcoming%20warm%20aura%2C%20social%20gathering%20energy%2C%20harmony%20crystals%2C%20supportive%20presence%2C%20nurturing%20design%20elements&width=300&height=300&seq=esfj3&orientation=squarish"
+            alt="ESFJ Consul" class="w-full h-full object-cover object-top">
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-rose-400">ESFJ</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Consul</h4>
+          <div class="text-sm text-gray-400 mb-4 space-y-1">
+            <p>• Social harmony creator</p>
+            <p>• Community supporter</p>
+            <p>• Relationship facilitator</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-rose-400 font-medium block mb-1">Planet Community</span>
+            <p class="text-xs text-gray-500">A world of celebration and togetherness</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Superpower</span>
+            <p class="text-xs text-gray-400">Social Bonding - Connects hearts and minds</p>
+          </div>
+          <div class="flex flex-wrap gap-1 justify-center">
+            <span class="text-xs px-2 py-1 bg-primary/20 rounded text-primary">ISTP</span>
+            <span class="text-xs px-2 py-1 bg-secondary/20 rounded text-secondary">ISFP</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ISTP -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="ISTP" data-group="SP">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden">
+          <img src="https://readdy.ai/api/search-image?query=mechanical%20fox%20with%20floating%20tools%2C%20technical%20precision%20aura%2C%20problem-solving%20energy%20field%2C%20craftsmanship%20symbols%2C%20engineering%20expertise%2C%20innovative%20design&width=300&height=300&seq=istp3&orientation=squarish"
+            alt="ISTP Virtuoso" class="w-full h-full object-cover object-top">
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-gray-400">ISTP</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Virtuoso</h4>
+          <div class="text-sm text-gray-400 mb-4 space-y-1">
+            <p>• Practical problem solver</p>
+            <p>• Mechanical master</p>
+            <p>• Crisis response expert</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-gray-400 font-medium block mb-1">Planet Craft</span>
+            <p class="text-xs text-gray-500">A workshop world of tools and creation</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Superpower</span>
+            <p class="text-xs text-gray-400">Mechanical Mastery - Fixes anything instantly</p>
+          </div>
+          <div class="flex flex-wrap gap-1 justify-center">
+            <span class="text-xs px-2 py-1 bg-primary/20 rounded text-primary">ESFJ</span>
+            <span class="text-xs px-2 py-1 bg-secondary/20 rounded text-secondary">ENFJ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ISFP -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="ISFP" data-group="SP">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden">
+          <img src="https://readdy.ai/api/search-image?query=female%20artist%20character%20with%20flowing%20paint%20elements%2C%20imaginative%20rainbow%20aura%2C%20expressive%20dance%20pose%2C%20creative%20energy%20swirls%2C%20artistic%20inspiration%20effects&width=300&height=300&seq=isfp3&orientation=squarish"
+            alt="ISFP Adventurer" class="w-full h-full object-cover object-top">
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-purple-400">ISFP</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Adventurer</h4>
+          <div class="text-sm text-gray-400 mb-4 space-y-1">
+            <p>• Artistic soul</p>
+            <p>• Values-driven explorer</p>
+            <p>• Authentic expression master</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-purple-400 font-medium block mb-1">Planet Expression</span>
+            <p class="text-xs text-gray-500">A world of artistic beauty and freedom</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Superpower</span>
+            <p class="text-xs text-gray-400">Aesthetic Creation - Brings beauty to life</p>
+          </div>
+          <div class="flex flex-wrap gap-1 justify-center">
+            <span class="text-xs px-2 py-1 bg-primary/20 rounded text-primary">ESTJ</span>
+            <span class="text-xs px-2 py-1 bg-secondary/20 rounded text-secondary">ESFJ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESTP -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="ESTP" data-group="SP">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden">
+          <img src="https://readdy.ai/api/search-image?query=agile%20cheetah%20with%20dynamic%20speed%20trails%2C%20energetic%20movement%20blur%2C%20spontaneous%20action%20effects%2C%20adventure%20environment%2C%20thrill-seeking%20presence%2C%20freedom%20symbols&width=300&height=300&seq=estp3&orientation=squarish"
+            alt="ESTP Entrepreneur" class="w-full h-full object-cover object-top">
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-red-400">ESTP</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Entrepreneur</h4>
+          <div class="text-sm text-gray-400 mb-4 space-y-1">
+            <p>• Action-oriented dynamo</p>
+            <p>• Spontaneous problem solver</p>
+            <p>• Risk-taking adventurer</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-red-400 font-medium block mb-1">Planet Adventure</span>
+            <p class="text-xs text-gray-500">A world of endless thrills and challenges</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Superpower</span>
+            <p class="text-xs text-gray-400">Instant Adaptation - Thrives in any situation</p>
+          </div>
+          <div class="flex flex-wrap gap-1 justify-center">
+            <span class="text-xs px-2 py-1 bg-primary/20 rounded text-primary">ISFJ</span>
+            <span class="text-xs px-2 py-1 bg-secondary/20 rounded text-secondary">INFJ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESFP -->
+      <div class="type-card hologram-card rounded-2xl p-6 cursor-pointer" data-type="ESFP" data-group="SP">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden">
+          <img src="https://readdy.ai/api/search-image?query=female%20performer%20with%20spotlight%20effects%2C%20dynamic%20stage%20presence%2C%20joyful%20energy%20burst%2C%20celebration%20aura%2C%20musical%20instruments%2C%20entertainment%20symbols&width=300&height=300&seq=esfp3&orientation=squarish"
+            alt="ESFP Entertainer" class="w-full h-full object-cover object-top">
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-orange-400">ESFP</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Entertainer</h4>
+          <div class="text-sm text-gray-400 mb-4 space-y-1">
+            <p>• Spontaneous performer</p>
+            <p>• Joy spreader</p>
+            <p>• People energizer</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-orange-400 font-medium block mb-1">Planet Celebration</span>
+            <p class="text-xs text-gray-500">A world of endless festivals and joy</p>
+          </div>
+          <div class="mb-4">
+            <span class="text-xs text-yellow-400 font-medium block mb-1">Superpower</span>
+            <p class="text-xs text-gray-400">Mood Elevation - Lifts everyone's spirits</p>
+          </div>
+          <div class="flex flex-wrap gap-1 justify-center">
+            <span class="text-xs px-2 py-1 bg-primary/20 rounded text-primary">ISTJ</span>
+            <span class="text-xs px-2 py-1 bg-secondary/20 rounded text-secondary">ISFJ</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -267,22 +638,22 @@ html {
   <div class="max-w-7xl mx-auto">
     <div class="grid md:grid-cols-4 gap-8 mb-12">
       <div>
-        <div class="text-2xl font-bold neon-text font-pacifico mb-4 text-glow">MBTI Universe</div>
+        <div class="text-2xl font-bold neon-text font-pacifico mb-4">MBTI Universe</div>
         <p class="text-gray-400 mb-4">Discover your cosmic personality and join the superhero universe where every type has its own unique powers.</p>
         <div class="flex space-x-4">
-          <div class="w-10 h-10 flex items-center justify-center bg-primary/20 rounded-full hover:bg-primary/30 transition-colors cursor-pointer enhanced-glow">
+          <div class="w-10 h-10 flex items-center justify-center bg-primary/20 rounded-full hover:bg-primary/30 transition-colors cursor-pointer">
             <i class="ri-twitter-line text-primary"></i>
           </div>
-          <div class="w-10 h-10 flex items-center justify-center bg-primary/20 rounded-full hover:bg-primary/30 transition-colors cursor-pointer enhanced-glow">
+          <div class="w-10 h-10 flex items-center justify-center bg-primary/20 rounded-full hover:bg-primary/30 transition-colors cursor-pointer">
             <i class="ri-instagram-line text-primary"></i>
           </div>
-          <div class="w-10 h-10 flex items-center justify-center bg-primary/20 rounded-full hover:bg-primary/30 transition-colors cursor-pointer enhanced-glow">
+          <div class="w-10 h-10 flex items-center justify-center bg-primary/20 rounded-full hover:bg-primary/30 transition-colors cursor-pointer">
             <i class="ri-facebook-line text-primary"></i>
           </div>
         </div>
       </div>
       <div>
-        <h4 class="text-lg font-bold mb-4 text-primary text-glow">Explore</h4>
+        <h4 class="text-lg font-bold mb-4 text-primary">Explore</h4>
         <ul class="space-y-2 text-gray-400">
           <li><a href="#" class="hover:text-primary transition-colors">All 16 Types</a></li>
           <li><a href="#" class="hover:text-primary transition-colors">Personality Quiz</a></li>
@@ -291,7 +662,7 @@ html {
         </ul>
       </div>
       <div>
-        <h4 class="text-lg font-bold mb-4 text-secondary text-glow">Resources</h4>
+        <h4 class="text-lg font-bold mb-4 text-secondary">Resources</h4>
         <ul class="space-y-2 text-gray-400">
           <li><a href="#" class="hover:text-secondary transition-colors">MBTI Guide</a></li>
           <li><a href="#" class="hover:text-secondary transition-colors">Type Descriptions</a></li>
@@ -300,7 +671,7 @@ html {
         </ul>
       </div>
       <div>
-        <h4 class="text-lg font-bold mb-4 text-yellow-400 text-glow">Community</h4>
+        <h4 class="text-lg font-bold mb-4 text-yellow-400">Community</h4>
         <ul class="space-y-2 text-gray-400">
           <li><a href="#" class="hover:text-yellow-400 transition-colors">Discussion Forum</a></li>
           <li><a href="#" class="hover:text-yellow-400 transition-colors">Type Groups</a></li>
@@ -314,8 +685,6 @@ html {
     </div>
   </div>
 </footer>
-
-<!-- Your existing scripts remain exactly the same -->
 <script id="filter-functionality">
 document.addEventListener('DOMContentLoaded', function() {
   const filterTabs = document.querySelectorAll('.filter-tab');
@@ -406,29 +775,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     mobileMenu.classList.add('hidden');
   });
-});
-</script>
-<script>
-// Enhanced smooth scrolling for all links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    e.preventDefault();
-    const targetId = this.getAttribute('href');
-    if (targetId === '#') return;
-    
-    const targetElement = document.querySelector(targetId);
-    if (targetElement) {
-      window.scrollTo({
-        top: targetElement.offsetTop,
-        behavior: 'smooth'
-      });
-    }
-  });
-});
-
-// Smooth page load animation
-window.addEventListener('load', function() {
-  document.body.style.opacity = '1';
 });
 </script>
 </body>
