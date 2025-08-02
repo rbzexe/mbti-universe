@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MBTI Cosmic Quiz - Discover Your Superpower</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#57B5E7',
+        secondary: '#8DD3C7',
+        gold: '#FFD700',
+        silver: '#C0C0C0',
+        bronze: '#CD7F32',
+        platinum: '#E5E4E2',
+        diamond: '#b9f2ff'
+      },
+      borderRadius: {
+        'none': '0px',
+        'sm': '4px',
+        DEFAULT: '8px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '20px',
+        '2xl': '24px',
+        '3xl': '32px',
+        'full': '9999px',
+        'button': '8px'
+      },
+      fontFamily: {
+        'orbitron': ['Orbitron', 'monospace'],
+        'pacifico': ['Pacifico', 'serif']
+      }
+    }
+  }
+}
+</script>
+<style>
+:where([class^="ri-"])::before {
+  content: "\f3c2";
+}
+body {
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d1b69 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  touch-action: manipulation;
+}
+.neon-glow {
+  box-shadow: 0 0 20px rgba(87, 181, 231, 0.5), 0 0 40px rgba(87, 181, 231, 0.3), 0 0 60px rgba(87, 181, 231, 0.1);
+}
+.neon-text {
+  text-shadow: 0 0 10px rgba(87, 181, 231, 0.8), 0 0 20px rgba(87, 181, 231, 0.6), 0 0 30px rgba(87, 181, 231, 0.4);
+}
+.hologram-card {
+  background: linear-gradient(135deg, rgba(87, 181, 231, 0.1) 0%, rgba(141, 211, 199, 0.1) 100%);
+  border: 1px solid rgba(87, 181, 231, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hologram-card:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 15px 40px rgba(87, 181, 231, 0.3);
+  border-color: rgba(87, 181, 231, 0.6);
+}
+.answer-option {
+  background: linear-gradient(135deg, rgba(87, 181, 231, 0.05) 0%, rgba(141, 211, 199, 0.05) 100%);
+  border: 1px solid rgba(87, 181, 231, 0.2);
+  backdrop-filter: blur(5px);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+.answer-option:hover {
+  border-color: rgba(87, 181, 231, 0.5);
+  background: linear-gradient(135deg, rgba(87, 181, 231, 0.1) 0%, rgba(141, 211, 199, 0.1) 100%);
+  transform: translateY(-2px);
+}
+.answer-option.selected {
+  border-color: rgba(87, 181, 231, 0.8);
+  background: linear-gradient(135deg, rgba(87, 181, 231, 0.2) 0%, rgba(141, 211, 199, 0.2) 100%);
+  box-shadow: 0 0 25px rgba(87, 181, 231, 0.4);
+  transform: translateY(-3px) scale(1.02);
+}
+.progress-bar {
+  background: linear-gradient(90deg, rgba(87, 181, 231, 0.2) 0%, rgba(141, 211, 199, 0.2) 100%);
+  border: 1px solid rgba(87, 181, 231, 0.3);
+  backdrop-filter: blur(10px);
+}
+.progress-fill {
+  background: linear-gradient(90deg, #57B5E7 0%, #8DD3C7 100%);
+  box-shadow: 0 0 15px rgba(87, 181, 231, 0.6);
+  transition: width 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.particle-bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, rgba(87, 181, 231, 0.3), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(141, 211, 199, 0.3), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(251, 191, 114, 0.3), transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(252, 141, 98, 0.3), transparent);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: float 20s infinite linear;
+  z-index: -1;
+}
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+.cosmic-bg {
+  background: radial-gradient(ellipse at center, rgba(87, 181, 231, 0.1) 0%, transparent 70%),
+    radial-gradient(ellipse at 80% 20%, rgba(141, 211, 199, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(251, 191, 114, 0.1) 0%, transparent 50%);
+}
+.question-transition {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.question-transition.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Enhanced animations */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+@keyframes floatUp {
+  0% { transform: translateY(30px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1); }
+}
+@keyframes sparkle {
+  0% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 0.3; transform: scale(1); }
+}
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes rainbow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes subtlePulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+@keyframes slideIn {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1); }
+}
+
+/* New background elements */
+.star {
+  position: fixed;
+  background-color: white;
+  border-radius: 50%;
+  animation: sparkle 3s infinite ease-in-out;
+  z-index: -1;
+  will-change: transform, opacity;
+}
+.comet {
+  position: fixed;
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(87, 181, 231, 0) 0%, rgba(87, 181, 231, 0.8) 50%, rgba(87, 181, 231, 0) 100%);
+  transform-origin: left center;
+  z-index: -1;
+  animation: cometFly 15s linear infinite;
+  will-change: transform, opacity;
+}
+@keyframes cometFly {
+  0% { transform: translateX(0) translateY(0) scale(0.5); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(100vw) translateY(100vh) scale(1.5); opacity: 0; }
+}
+
+/* Enhanced Result styles */
+.result-container {
+  display: none;
+  animation: floatUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.mbti-badge {
+  font-size: 3.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #57B5E7, #8DD3C7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 15px rgba(87, 181, 231, 0.7);
+  animation: pulse 3s infinite ease-in-out, subtlePulse 6s infinite ease-in-out;
+  display: inline-block;
+}
+.rank-badge {
+  font-size: 2.2rem;
+  font-weight: 700;
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  border-radius: 50%;
+  margin: 0.5rem;
+  animation: floatUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both, pulse 4s infinite 1s;
+}
+.rank-S {
+  background: linear-gradient(135deg, #FFD700, #FFC000);
+  color: #000;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+}
+.rank-A {
+  background: linear-gradient(135deg, #C0C0C0, #A0A0A0);
+  color: #000;
+  box-shadow: 0 0 30px rgba(192, 192, 192, 0.8);
+}
+.rank-B {
+  background: linear-gradient(135deg, #CD7F32, #A0522D);
+  color: #000;
+  box-shadow: 0 0 30px rgba(205, 127, 50, 0.8);
+}
+.rank-SS {
+  background: linear-gradient(135deg, #b9f2ff, #7ec4f0);
+  color: #000;
+  box-shadow: 0 0 40px rgba(185, 242, 255, 0.9);
+  animation: floatUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both, pulse 2s infinite 1s, rainbow 8s infinite linear;
+}
+.trait-card {
+  background: rgba(15, 15, 35, 0.7);
+  border: 1px solid rgba(87, 181, 231, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: slideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform-origin: center;
+}
+.trait-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(87, 181, 231, 0.4);
+}
+.type-icon {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: floatUp 1s ease-out 0.2s both, pulse 3s infinite 1.5s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rainbow-text {
+  background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rainbow 8s ease infinite;
+}
+.answer-radio {
+  transition: all 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+/* Smooth touch interactions */
+button, .answer-option {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+button:active {
+  transform: scale(0.96);
+  transition: transform 0.1s ease;
+}
+.answer-option:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(15, 15, 35, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(87, 181, 231, 0.5);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(87, 181, 231, 0.8);
+}
+
+/* Particle effects */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100;
+  animation: particleFade 1s forwards;
+  will-change: transform, opacity;
+}
+@keyframes particleFade {
+  0% { transform: translate(0, 0); opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty)); opacity: 0; }
+}
+
+/* 3D tilt effect */
+.tilt-element {
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.03, 0.98, 0.52, 0.99);
+}
+</style>
+</head>
+<body class="font-orbitron text-white">
+<div class="particle-bg"></div>
+<!-- Dynamic stars and comets -->
+<div id="dynamic-bg-elements"></div>
+
+<nav class="fixed top-0 w-full z-50 bg-black/20 backdrop-blur-lg border-b border-primary/20">
+  <div class="max-w-7xl mx-auto px-6 py-4">
+    <div class="flex items-center justify-between">
+      <a href="index.html" data-readdy="true" class="flex items-center gap-3 hover:scale-105 transition-all duration-300 active:scale-95">
+        <div class="w-8 h-8 flex items-center justify-center">
+          <i class="ri-arrow-left-line text-2xl text-primary"></i>
+        </div>
+        <span class="text-lg font-medium">Back to Universe</span>
+      </a>
+      <div class="text-2xl font-bold neon-text font-pacifico">MBTI Quiz</div>
+      <div class="flex items-center gap-4">
+        <div class="text-sm text-gray-400">
+          <span id="current-question">1</span> / <span id="total-questions">15</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div id="stopwatch" class="text-sm font-bold text-primary">00:00</div>
+          <div class="w-12 h-12 flex items-center justify-center bg-primary/20 rounded-full">
+            <span id="progress-percentage" class="text-sm font-bold text-primary">0%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="pt-20 min-h-screen">
+  <div class="progress-bar h-2 mx-6 mt-4 rounded-full overflow-hidden">
+    <div id="progress-bar-fill" class="progress-fill h-full rounded-full transition-all duration-500" style="width: 6.67%"></div>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-6 py-12">
+    <div id="quiz-container" class="question-transition active tilt-element">
+      <div class="hologram-card rounded-3xl p-8 mb-8">
+        <div class="text-center mb-8">
+          <div class="text-sm text-primary font-medium mb-2">Question <span id="question-number">1</span></div>
+          <h2 id="question-text" class="text-2xl md:text-3xl font-bold mb-4 leading-relaxed">
+            You're invited to a cosmic gathering of superheroes. What's your first instinct?
+          </h2>
+          <div class="text-sm text-gray-400">
+            Choose the option that resonates most with your natural response
+          </div>
+        </div>
+
+        <div id="answers-container" class="space-y-4">
+          <div class="answer-option rounded-2xl p-6" data-value="E">
+            <div class="flex items-start gap-4">
+              <div class="w-6 h-6 flex items-center justify-center mt-1">
+                <div class="w-4 h-4 rounded-full border-2 border-primary/50 answer-radio"></div>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold mb-2">Seek out new allies and form connections</h4>
+                <p class="text-gray-400 text-sm">I thrive on meeting new heroes and building a network of cosmic allies across different planets.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="answer-option rounded-2xl p-6" data-value="I">
+            <div class="flex items-start gap-4">
+              <div class="w-6 h-6 flex items-center justify-center mt-1">
+                <div class="w-4 h-4 rounded-full border-2 border-primary/50 answer-radio"></div>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold mb-2">Find a quiet corner to observe and strategize</h4>
+                <p class="text-gray-400 text-sm">I prefer to study the dynamics and understand each hero's powers before engaging deeply.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="answer-option rounded-2xl p-6" data-value="E2">
+            <div class="flex items-start gap-4">
+              <div class="w-6 h-6 flex items-center justify-center mt-1">
+                <div class="w-4 h-4 rounded-full border-2 border-primary/50 answer-radio"></div>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold mb-2">Take charge and organize group activities</h4>
+                <p class="text-gray-400 text-sm">I naturally step into leadership roles and help coordinate team missions and adventures.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="answer-option rounded-2xl p-6" data-value="I2">
+            <div class="flex items-start gap-4">
+              <div class="w-6 h-6 flex items-center justify-center mt-1">
+                <div class="w-4 h-4 rounded-full border-2 border-primary/50 answer-radio"></div>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold mb-2">Connect with one or two kindred spirits</h4>
+                <p class="text-gray-400 text-sm">I seek meaningful one-on-one conversations with heroes who share similar values and perspectives.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center mt-8">
+        <button id="prev-btn" class="bg-gray-600/20 px-8 py-4 rounded-button font-semibold hover:bg-gray-600/30 transition-all duration-300 !rounded-button whitespace-nowrap opacity-50 cursor-not-allowed active:scale-95" disabled>
+          <!-- <span class="flex items-center gap-2"> -->
+            <!-- <i class="ri-arrow-left-line"></i> -->
+            <!-- Previous
+          </span> -->
+        </button>
+
+        <div class="flex items-center gap-4">
+          <div class="text-sm text-gray-400">
+            Estimated time: <span id="time-remaining">5 min</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result Container -->
+    <div id="result-container" class="result-container text-center py-12">
+      <div class="hologram-card rounded-3xl p-8 mb-8 tilt-element">
+        <div class="mb-8">
+          <div class="text-primary font-medium mb-2">Your Cosmic Personality Type</div>
+          <div class="type-icon mb-4" id="type-icon"></div>
+          <h2 id="mbti-result" class="mbti-badge mb-4">INFJ</h2>
+          <div class="rank-badge rank-SS mb-6">SS Rank</div>
+          <h3 id="mbti-title" class="text-xl font-bold rainbow-text mb-2">The Cosmic Visionary</h3>
+          <p id="mbti-description" class="text-lg mb-8 max-w-2xl mx-auto">
+            As a rare cosmic visionary, you possess an extraordinary combination of intuition and compassion that allows you to see possibilities others miss.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div class="trait-card rounded-2xl p-6" style="animation-delay: 0.2s">
+            <h3 class="text-xl font-bold text-primary mb-4">Strengths <i class="ri-shining-line"></i></h3>
+            <ul id="strengths-list" class="space-y-2 text-left">
+              <li class="flex items-start gap-2">
+                <i class="ri-checkbox-circle-fill text-green-400 mt-1"></i>
+                <span>Creative and visionary</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="ri-checkbox-circle-fill text-green-400 mt-1"></i>
+                <span>Insightful and perceptive</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="ri-checkbox-circle-fill text-green-400 mt-1"></i>
+                <span>Determined and passionate</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="ri-checkbox-circle-fill text-green-400 mt-1"></i>
+                <span>Exceptional intuition</span>
+              </li>
+            </ul>
+          </div>
+          <div class="trait-card rounded-2xl p-6" style="animation-delay: 0.4s">
+            <h3 class="text-xl font-bold text-primary mb-4">Weaknesses <i class="ri-error-warning-line"></i></h3>
+            <ul id="weaknesses-list" class="space-y-2 text-left">
+              <li class="flex items-start gap-2">
+                <i class="ri-close-circle-fill text-red-400 mt-1"></i>
+                <span>Perfectionistic tendencies</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="ri-close-circle-fill text-red-400 mt-1"></i>
+                <span>Sensitive to criticism</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="ri-close-circle-fill text-red-400 mt-1"></i>
+                <span>Prone to burnout</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="ri-close-circle-fill text-red-400 mt-1"></i>
+                <span>Difficulty with small talk</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="trait-card rounded-2xl p-6 mb-8" style="animation-delay: 0.6s">
+          <h3 class="text-xl font-bold text-primary mb-4">Cosmic Compatibility <i class="ri-hearts-line"></i></h3>
+          <p id="compatibility-text" class="mb-4">
+            You form the strongest bonds with ENTP and ENFP types who can help bring your visions to reality while keeping the energy light and inspiring.
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <span class="px-4 py-2 bg-primary/20 rounded-full hover:bg-primary/30 transition-all">ENTP</span>
+            <span class="px-4 py-2 bg-primary/20 rounded-full hover:bg-primary/30 transition-all">ENFP</span>
+            <span class="px-4 py-2 bg-primary/20 rounded-full hover:bg-primary/30 transition-all">INFP</span>
+          </div>
+        </div>
+
+        <div class="trait-card rounded-2xl p-6 mb-8" style="animation-delay: 0.8s">
+          <h3 class="text-xl font-bold text-primary mb-4">Your Cosmic Superpowers <i class="ri-flashlight-line"></i></h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-primary/10 p-4 rounded-xl hover:bg-primary/20 transition-all">
+              <div class="flex items-center gap-2 mb-2">
+                <i class="ri-lightbulb-flash-line text-primary"></i>
+                <h4 class="font-bold">Future Sight</h4>
+              </div>
+              <p class="text-sm">You can anticipate cosmic trends and see possibilities before they manifest.</p>
+            </div>
+            <div class="bg-primary/10 p-4 rounded-xl hover:bg-primary/20 transition-all">
+              <div class="flex items-center gap-2 mb-2">
+                <i class="ri-team-line text-primary"></i>
+                <h4 class="font-bold">Empathic Resonance</h4>
+              </div>
+              <p class="text-sm">You deeply understand others' emotions and motivations across star systems.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="trait-card rounded-2xl p-6 mb-8" style="animation-delay: 1s">
+          <h3 class="text-xl font-bold text-primary mb-4">Your Cosmic Mission <i class="ri-rocket-2-line"></i></h3>
+          <p id="mission-text" class="mb-4">
+            Your purpose is to inspire galactic harmony through your visionary ideas and deep understanding of cosmic interconnectedness.
+          </p>
+          <div class="w-full bg-gray-700 rounded-full h-2.5 mb-4">
+            <div class="bg-primary h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
+          </div>
+          <p class="text-sm text-gray-400">Current mission completion: <span id="mission-percent">0</span>%</p>
+        </div>
+
+        <button id="restart-btn" class="mt-8 bg-primary/20 px-8 py-4 rounded-button font-semibold hover:bg-primary/30 transition-all duration-300 active:scale-95" style="animation-delay: 1.2s">
+          <span class="flex items-center gap-2">
+            Take Quiz Again
+            <i class="ri-restart-line"></i>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Quiz data with 15 questions
+  const quizQuestions = [
+    {
+      question: "When faced with a difficult challenge, what is your first instinct?",
+      answers: [
+        { text: "Analyze the situation logically to find the most efficient solution.", value: "T" },
+        { text: "Seek guidance and support from others to overcome it together.", value: "F" },
+        { text: "Take immediate action and tackle the problem head-on.", value: "P" },
+        { text: "Ponder on the underlying principles and long-term implications.", value: "N" }
+      ]
+    },
+    {
+      question: "You're at a party. Where are you most likely to be?",
+      answers: [
+        { text: "Engaging in lively conversations with a group of people.", value: "E" },
+        { text: "Observing from a distance and having a deep conversation with one or two people.", value: "I" },
+        { text: "Helping the host with party preparations or tasks.", value: "F" },
+        { text: "Moving between different groups, introducing people to each other.", value: "E2" }
+      ]
+    },
+    {
+      question: "How do you prefer to make decisions?",
+      answers: [
+        { text: "Based on careful analysis of data and facts.", value: "T" },
+        { text: "Based on personal values and how the decision affects others.", value: "F" },
+        { text: "By considering all possible options and their potential consequences.", value: "N" },
+        { text: "By trusting your gut feeling and past experiences.", value: "S" }
+      ]
+    },
+    {
+      question: "When starting a new project, what do you focus on?",
+      answers: [
+        { text: "The practical steps and a clear, detailed plan.", value: "S" },
+        { text: "The big picture and the future possibilities.", value: "N" },
+        { text: "Getting everyone organized and assigning tasks.", value: "J" },
+        { text: "Exploring creative and unconventional ideas first.", value: "P" }
+      ]
+    },
+    {
+      question: "How do you approach your daily life?",
+      answers: [
+        { text: "With a structured schedule and a to-do list.", value: "J" },
+        { text: "With spontaneity and adaptability, seeing where the day takes you.", value: "P" },
+        { text: "By being flexible but also knowing what needs to get done.", value: "S" },
+        { text: "By thinking about the meaning and purpose behind each task.", value: "N" }
+      ]
+    },
+    {
+      question: "You win a trip to a foreign city. What's your top priority?",
+      answers: [
+        { text: "Visiting all the major tourist landmarks and historical sites.", value: "S" },
+        { text: "Exploring the hidden gems and local culture off the beaten path.", value: "N" },
+        { text: "Learning key phrases and customs to interact with locals.", value: "J" },
+        { text: "Relaxing and enjoying the new atmosphere without a strict plan.", value: "P" }
+      ]
+    },
+    {
+      question: "A friend is upset. What is your typical response?",
+      answers: [
+        { text: "Listen to their feelings and offer emotional support.", value: "F" },
+        { text: "Help them by offering a logical solution to their problem.", value: "T" },
+        { text: "Distract them with a fun activity or a joke.", value: "E" },
+        { text: "Give them space and let them come to you when they're ready.", value: "I" }
+      ]
+    },
+    {
+      question: "When recharging, you prefer to...",
+      answers: [
+        { text: "Spend time alone in a quiet, peaceful environment.", value: "I" },
+        { text: "Go out and socialize with friends and family.", value: "E" },
+        { text: "Learn a new skill or read a fascinating book.", value: "N" },
+        { text: "Get a sense of accomplishment by finishing a practical task.", value: "S" }
+      ]
+    },
+    {
+      question: "Which describes you better?",
+      answers: [
+        { text: "You prefer to finish tasks before they're due.", value: "J" },
+        { text: "You are energized by last-minute deadlines.", value: "P" },
+        { text: "You enjoy discussing abstract concepts and theories.", value: "N" },
+        { text: "You like to stick to what is known and proven.", value: "S" }
+      ]
+    },
+    {
+      question: "What is more important in a team project?",
+      answers: [
+        { text: "Ensuring everyone feels valued and the group works harmoniously.", value: "F" },
+        { text: "Achieving the best possible outcome through objective critique.", value: "T" },
+        { text: "Maintaining a clear structure and deadlines for everyone.", value: "J" },
+        { text: "Adapting to new ideas as they arise during the project.", value: "P" }
+      ]
+    },
+    {
+      question: "Your team is brainstorming ideas. You are more likely to:",
+      answers: [
+        { text: "Present a list of well-researched, practical ideas.", value: "S" },
+        { text: "Propose new, out-of-the-box concepts that no one has considered.", value: "N" },
+        { text: "Encourage everyone to share their thoughts and build on them.", value: "E" },
+        { text: "Analyze the feasibility of each idea as it's presented.", value: "T" }
+      ]
+    },
+    {
+      question: "In a conversation, you tend to:",
+      answers: [
+        { text: "Share your own experiences and thoughts to relate to the other person.", value: "E" },
+        { text: "Listen intently and ask thoughtful, probing questions.", value: "I" },
+        { text: "Focus on factual details and specific examples.", value: "S" },
+        { text: "Discuss abstract concepts and future possibilities.", value: "N" }
+      ]
+    },
+    {
+      question: "When planning a vacation, your preference is:",
+      answers: [
+        { text: "To have a detailed itinerary for each day.", value: "J" },
+        { text: "To decide on activities as you go.", value: "P" },
+        { text: "To find the most affordable and efficient travel options.", value: "T" },
+        { text: "To choose a destination based on its cultural and emotional impact.", value: "F" }
+      ]
+    },
+    {
+      question: "When you receive feedback, you are more likely to:",
+      answers: [
+        { text: "Objectively evaluate the feedback for its truthfulness and usefulness.", value: "T" },
+        { text: "Take the feedback personally and consider the motivations behind it.", value: "F" },
+        { text: "Focus on the specific examples given.", value: "S" },
+        { text: "Consider the bigger picture of how this feedback helps you grow.", value: "N" }
+      ]
+    },
+    {
+      question: "You have a free afternoon. How do you spend it?",
+      answers: [
+        { text: "Tackling a list of chores and errands that have piled up.", value: "J" },
+        { text: "Reading a book or watching a movie alone.", value: "I" },
+        { text: "Calling a friend to see if they want to do something.", value: "E" },
+        { text: "Trying a new and creative hobby or activity.", value: "P" }
+      ]
+    }
+  ];
+
+  // MBTI type descriptions with ranks
+  const mbtiTypes = {
+    "INTJ": {
+      title: "The Cosmic Strategist",
+      description: "Your brilliant cosmic mind excels at developing comprehensive systems and long-term visions for galactic harmony. You see patterns others miss and devise ingenious solutions to complex interstellar problems.",
+      strengths: ["Strategic thinking", "Independent", "Determined", "Innovative"],
+      weaknesses: ["Overly analytical", "Perfectionistic", "Dismissive of emotions", "Arrogant"],
+      compatibility: ["ENTP", "ENFP", "ISTP"],
+      superpowers: ["Cosmic foresight", "Systems optimization", "Pattern recognition"],
+      mission: "To design the perfect framework for universal order and efficiency",
+      rank: "S"
+    },
+    "INTP": {
+      title: "The Cosmic Theorist",
+      description: "Your insatiable curiosity drives you to uncover the fundamental truths of the cosmos. You excel at analyzing complex cosmic phenomena and developing groundbreaking theoretical models.",
+      strengths: ["Original", "Open-minded", "Inventive", "Logical"],
+      weaknesses: ["Absent-minded", "Insensitive", "Overly skeptical", "Disconnected"],
+      compatibility: ["ENTJ", "ESTJ", "ENFJ"],
+      superpowers: ["Conceptual brilliance", "Problem-solving", "Technical mastery"],
+      mission: "To discover and articulate the underlying principles governing the universe",
+      rank: "A"
+    },
+    "ENTJ": {
+      title: "The Cosmic Commander",
+      description: "Born to lead interstellar alliances, you possess an unmatched ability to organize galactic resources and inspire civilizations toward a shared vision of cosmic progress.",
+      strengths: ["Charismatic", "Efficient", "Confident", "Strong-willed"],
+      weaknesses: ["Dominating", "Impatient", "Intolerant", "Aggressive"],
+      compatibility: ["INTP", "ISTP", "INTJ"],
+      superpowers: ["Strategic leadership", "Resource mobilization", "Decisive action"],
+      mission: "To unite star systems under a banner of progress and achievement",
+      rank: "S"
+    },
+    "ENTP": {
+      title: "The Cosmic Innovator",
+      description: "Your quick cosmic wit and endless creativity make you the galaxy's premier idea generator. You thrive on intellectual challenges and spark innovation across dimensions.",
+      strengths: ["Quick-witted", "Curious", "Original", "Energetic"],
+      weaknesses: ["Argumentative", "Inconsistent", "Insensitive", "Rebellious"],
+      compatibility: ["INFJ", "INTJ", "ISTJ"],
+      superpowers: ["Idea generation", "Adaptability", "Debate mastery"],
+      mission: "To challenge cosmic conventions and pioneer revolutionary concepts",
+      rank: "S"
+    },
+    "INFJ": {
+      title: "The Cosmic Visionary",
+      description: "As a rare cosmic visionary, you possess an extraordinary combination of intuition and compassion that allows you to see possibilities others miss while deeply understanding emotional undercurrents.",
+      strengths: ["Creative", "Insightful", "Compassionate", "Determined"],
+      weaknesses: ["Perfectionistic", "Sensitive", "Private", "Burnout-prone"],
+      compatibility: ["ENFP", "ENTP", "ENFJ"],
+      superpowers: ["Future sight", "Empathic resonance", "Transformational insight"],
+      mission: "To inspire galactic harmony through profound understanding and visionary ideas",
+      rank: "SS"
+    },
+    "INFP": {
+      title: "The Cosmic Dreamer",
+      description: "Your rich inner cosmos and strong values guide you to champion interstellar causes with quiet determination. You see the beauty in all beings and fight for cosmic justice.",
+      strengths: ["Idealistic", "Authentic", "Compassionate", "Creative"],
+      weaknesses: ["Overly sensitive", "Unrealistic", "Self-isolating", "Impractical"],
+      compatibility: ["ENFJ", "ENTJ", "ESTJ"],
+      superpowers: ["Moral compass", "Creative expression", "Harmony sensing"],
+      mission: "To nurture universal compassion and artistic expression across galaxies",
+      rank: "A"
+    },
+    "ENFJ": {
+      title: "The Cosmic Mentor",
+      description: "Your natural cosmic charisma and genuine concern for others make you a beacon of inspiration across star systems. You have an uncanny ability to help beings realize their potential.",
+      strengths: ["Persuasive", "Empathetic", "Charismatic", "Supportive"],
+      weaknesses: ["Manipulative", "Overbearing", "Approval-seeking", "Overly idealistic"],
+      compatibility: ["INFP", "ISFP", "INTP"],
+      superpowers: ["Motivational speaking", "Team building", "Potential recognition"],
+      mission: "To awaken the greatness in all cosmic beings and foster unity",
+      rank: "A"
+    },
+    "ENFP": {
+      title: "The Cosmic Spark",
+      description: "Your infectious cosmic enthusiasm and creativity light up entire galaxies. You see connections everywhere and inspire others with your boundless energy and optimism.",
+      strengths: ["Enthusiastic", "Creative", "Social", "Spontaneous"],
+      weaknesses: ["Disorganized", "Overemotional", "Overcommitted", "Easily distracted"],
+      compatibility: ["INTJ", "INFJ", "ISTJ"],
+      superpowers: ["Idea connection", "Energy generation", "Possibility vision"],
+      mission: "To ignite cosmic creativity and joy throughout the universe",
+      rank: "S"
+    },
+    "ISTJ": {
+      title: "The Cosmic Guardian",
+      description: "Your unwavering cosmic reliability and attention to detail make you the backbone of interstellar society. You uphold traditions and ensure systems function flawlessly across galaxies.",
+      strengths: ["Reliable", "Organized", "Practical", "Detail-oriented"],
+      weaknesses: ["Stubborn", "Inflexible", "Judgmental", "Boring"],
+      compatibility: ["ESFP", "ESTP", "ENFJ"],
+      superpowers: ["System maintenance", "Protocol mastery", "Precision execution"],
+      mission: "To preserve cosmic order and ensure the smooth operation of universal systems",
+      rank: "B"
+    },
+    "ISFJ": {
+      title: "The Cosmic Protector",
+      description: "Your cosmic nurturing instinct and incredible memory make you the galaxy's most dependable caretaker. You quietly work behind the scenes to ensure everyone's needs are met.",
+      strengths: ["Supportive", "Reliable", "Patient", "Observant"],
+      weaknesses: ["Overly humble", "Resistant to change", "Overwhelmed", "Self-sacrificing"],
+      compatibility: ["ESTP", "ESFP", "ENTP"],
+      superpowers: ["Memory retention", "Practical care", "Loyalty"],
+      mission: "To safeguard cosmic traditions and provide compassionate service",
+      rank: "B"
+    },
+    "ESTJ": {
+      title: "The Cosmic Executive",
+      description: "Your cosmic organizational skills and direct approach get things done efficiently across star systems. You excel at implementing practical solutions and maintaining order.",
+      strengths: ["Efficient", "Organized", "Direct", "Loyal"],
+      weaknesses: ["Inflexible", "Harsh", "Controlling", "Insensitive"],
+      compatibility: ["ISFP", "ISTP", "INTP"],
+      superpowers: ["Project management", "Decision-making", "Standard enforcement"],
+      mission: "To establish and maintain efficient cosmic operations",
+      rank: "A"
+    },
+    "ESFJ": {
+      title: "The Cosmic Caretaker",
+      description: "Your cosmic warmth and sociability create harmony throughout the galaxy. You naturally remember important details about others and work tirelessly to maintain interstellar relationships.",
+      strengths: ["Supportive", "Sociable", "Practical", "Loyal"],
+      weaknesses: ["Overbearing", "Approval-seeking", "Conventional", "Overly sensitive"],
+      compatibility: ["ISFP", "ISTP", "INFP"],
+      superpowers: ["Community building", "Social memory", "Harmony creation"],
+      mission: "To foster cosmic connections and nurture universal togetherness",
+      rank: "S"
+    },
+    "ISTP": {
+      title: "The Cosmic Mechanic",
+      description: "Your cosmic cool under pressure and mechanical genius allow you to solve practical problems across dimensions. You thrive on understanding how things work and fixing what's broken.",
+      strengths: ["Adaptable", "Logical", "Practical", "Independent"],
+      weaknesses: ["Risk-taking", "Insensitive", "Private", "Stubborn"],
+      compatibility: ["ESTJ", "ESFJ", "ENTJ"],
+      superpowers: ["Crisis management", "Technical analysis", "Tool mastery"],
+      mission: "To maintain and repair the fundamental machinery of the cosmos",
+      rank: "B"
+    },
+    "ISFP": {
+      title: "The Cosmic Artist",
+      description: "Your cosmic aesthetic sense and gentle nature bring beauty to the universe. You experience life intensely and express profound truths through artistic mediums.",
+      strengths: ["Artistic", "Sensitive", "Adaptable", "Appreciative"],
+      weaknesses: ["Overly sensitive", "Self-doubting", "Avoidant", "Unpredictable"],
+      compatibility: ["ENFJ", "ESTJ", "ESFJ"],
+      superpowers: ["Aesthetic creation", "Present-moment awareness", "Tactile mastery"],
+      mission: "To reveal cosmic beauty through artistic expression",
+      rank: "B"
+    },
+    "ESTP": {
+      title: "The Cosmic Dynamo",
+      description: "Your cosmic energy and quick thinking make you the ultimate interstellar troubleshooter. You thrive on action and excel at thinking on your feet during galactic crises.",
+      strengths: ["Energetic", "Adaptable", "Practical", "Observant"],
+      weaknesses: ["Impulsive", "Insensitive", "Impatient", "Risk-taking"],
+      compatibility: ["ISFJ", "ISTJ", "INFJ"],
+      superpowers: ["Quick reflexes", "Crisis navigation", "Opportunity spotting"],
+      mission: "To bring dynamic energy and practical solutions to cosmic challenges",
+      rank: "B"
+    },
+    "ESFP": {
+      title: "The Cosmic Entertainer",
+      description: "Your cosmic spontaneity and charm make you the life of every interstellar party. You bring joy to others through your infectious enthusiasm and zest for cosmic life.",
+      strengths: ["Enthusiastic", "Sociable", "Spontaneous", "Practical"],
+      weaknesses: ["Overly sensitive", "Disorganized", "Distractible", "Dramatic"],
+      compatibility: ["ISTJ", "ISFJ", "INTJ"],
+      superpowers: ["Joy generation", "Present-moment engagement", "Social connection"],
+      mission: "To spread cosmic cheer and celebrate universal diversity",
+      rank: "A"
+    }
+  };
+
+  // Quiz state variables
+  let currentQuestionIndex = 0;
+  let answers = [];
+  let startTime = new Date();
+  let timerInterval;
+  
+  // DOM elements
+  const quizContainer = document.getElementById('quiz-container');
+  const resultContainer = document.getElementById('result-container');
+  const questionText = document.getElementById('question-text');
+  const questionNumber = document.getElementById('question-number');
+  const currentQuestionDisplay = document.getElementById('current-question');
+  const totalQuestionsDisplay = document.getElementById('total-questions');
+  const progressBarFill = document.getElementById('progress-bar-fill');
+  const progressPercentage = document.getElementById('progress-percentage');
+  const answersContainer = document.getElementById('answers-container');
+  const prevBtn = document.getElementById('prev-btn');
+  const restartBtn = document.getElementById('restart-btn');
+  const stopwatch = document.getElementById('stopwatch');
+  const timeRemaining = document.getElementById('time-remaining');
+  
+  // Initialize quiz
+  function initQuiz() {
+    totalQuestionsDisplay.textContent = quizQuestions.length;
+    updateQuestion();
+    startTimer();
+    updateProgressBar();
+    
+    // Initially disable previous button
+    prevBtn.disabled = true;
+    prevBtn.classList.add('opacity-50', 'cursor-not-allowed');
+  }
+  
+  // Update question display
+  function updateQuestion() {
+    const currentQuestion = quizQuestions[currentQuestionIndex];
+    questionText.textContent = currentQuestion.question;
+    questionNumber.textContent = currentQuestionIndex + 1;
+    currentQuestionDisplay.textContent = currentQuestionIndex + 1;
+    
+    // Clear previous answers
+    answersContainer.innerHTML = '';
+    
+    // Add new answers
+    currentQuestion.answers.forEach((answer, index) => {
+      const answerElement = document.createElement('div');
+      answerElement.className = 'answer-option rounded-2xl p-6';
+      answerElement.dataset.value = answer.value;
+      
+      answerElement.innerHTML = `
+        <div class="flex items-start gap-4">
+          <div class="w-6 h-6 flex items-center justify-center mt-1">
+            <div class="w-4 h-4 rounded-full border-2 border-primary/50 answer-radio"></div>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-2">${answer.text}</h4>
+            <p class="text-gray-400 text-sm">${answer.description || ''}</p>
+          </div>
+        </div>
+      `;
+      
+      // Check if this answer was previously selected
+      if (answers[currentQuestionIndex] === answer.value) {
+        answerElement.classList.add('selected');
+        answerElement.querySelector('.answer-radio').classList.add('bg-primary');
+        answerElement.querySelector('.answer-radio').classList.remove('border-primary/50');
+      }
+      
+      answerElement.addEventListener('click', selectAnswer);
+      answersContainer.appendChild(answerElement);
+    });
+    
+    // Update previous button state
+    prevBtn.disabled = currentQuestionIndex === 0;
+    if (currentQuestionIndex === 0) {
+      prevBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    } else {
+      prevBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
+    
+    // Add transition effect
+    quizContainer.classList.remove('active');
+    setTimeout(() => {
+      quizContainer.classList.add('active');
+    }, 10);
+  }
+  
+  // Handle answer selection
+  function selectAnswer(e) {
+    const selectedOption = e.currentTarget;
+    const value = selectedOption.dataset.value;
+    
+    // Remove selected class from all options
+    document.querySelectorAll('.answer-option').forEach(option => {
+      option.classList.remove('selected');
+      option.querySelector('.answer-radio').classList.remove('bg-primary');
+      option.querySelector('.answer-radio').classList.add('border-primary/50');
+    });
+    
+    // Add selected class to clicked option
+    selectedOption.classList.add('selected');
+    const radio = selectedOption.querySelector('.answer-radio');
+    radio.classList.add('bg-primary');
+    radio.classList.remove('border-primary/50');
+    
+    // Store the selected answer
+    answers[currentQuestionIndex] = value;
+    
+    // Automatically proceed after a short delay
+    setTimeout(() => {
+      if (currentQuestionIndex < quizQuestions.length - 1) {
+        currentQuestionIndex++;
+        updateQuestion();
+        updateProgressBar();
+      } else {
+        // Last question - show results
+        showResults();
+      }
+    }, 500); // 0.5 second delay
+  }
+  
+  // Update progress bar
+function updateProgressBar() {
+  const totalQuestions = quizQuestions.length;
+  const current = currentQuestionIndex;
+
+  let progress = 0;
+
+  if (totalQuestions > 1) {
+    progress = (current / (totalQuestions - 1)) * 100;
+  }
+
+  progressBarFill.style.width = `${progress}%`;
+  progressPercentage.textContent = `${Math.round(progress)}%`;
+
+  const questionsLeft = totalQuestions - current;
+  const minutesLeft = Math.max(1, Math.ceil(questionsLeft * 0.75));
+  timeRemaining.textContent = `${minutesLeft} min`;
+}
+
+
+
+  
+  // Timer functions
+  function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(updateTimerDisplay, 1000);
+  }
+  
+function updateTimerDisplay() {
+  const now = new Date();
+  const elapsedMs = now - startTime; // 🟢 difference in ms
+  
+  const totalSeconds = Math.floor(elapsedMs / 1000);
+  const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+  const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+
+  stopwatch.textContent = `${minutes}:${seconds}`;
+}
+
+  
+  function stopTimer() {
+    clearInterval(timerInterval);
+  }
+  
+  // Navigation functions
+  prevBtn.addEventListener('click', () => {
+    if (currentQuestionIndex > 0) {
+      currentQuestionIndex--;
+      updateQuestion();
+      updateProgressBar();
+    }
+  });
+  
+  // Show results
+  function showResults() {
+    stopTimer();
+    calculateMBTI();
+    quizContainer.style.display = 'none';
+    resultContainer.style.display = 'block';
+    
+    // Scroll to top
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+  
+  // Calculate MBTI type from answers
+  function calculateMBTI() {
+    // Count answers for each dimension
+    const dimensions = {
+      E: 0, I: 0,  // Extraversion vs Introversion
+      S: 0, N: 0,  // Sensing vs Intuition
+      T: 0, F: 0,  // Thinking vs Feeling
+      J: 0, P: 0   // Judging vs Perceiving
+    };
+    
+    // Process each answer
+    answers.forEach(answer => {
+      if (!answer) return;
+      
+      const mainTrait = answer.charAt(0); // First character indicates main trait
+      const secondaryTrait = answer.length > 1 ? answer.charAt(1) : null; // Number indicates secondary trait
+      
+      // Count main trait
+      if (Object.keys(dimensions).includes(mainTrait)) {
+        dimensions[mainTrait]++;
+      }
+      
+      // Count secondary trait if it's a valid dimension
+      if (secondaryTrait && Object.keys(dimensions).includes(secondaryTrait)) {
+        dimensions[secondaryTrait]++;
+      }
+    });
+    
+    // Determine MBTI type
+    const type = [
+      dimensions.E > dimensions.I ? 'E' : 'I',
+      dimensions.S > dimensions.N ? 'S' : 'N',
+      dimensions.T > dimensions.F ? 'T' : 'F',
+      dimensions.J > dimensions.P ? 'J' : 'P'
+    ].join('');
+    
+    // Display results
+    displayResults(type);
+  }
+  
+  // Display MBTI results
+  function displayResults(type) {
+    const typeInfo = mbtiTypes[type] || mbtiTypes["INFJ"]; // Default to INFJ if type not found
+    
+    // Set basic type info
+    document.getElementById('mbti-result').textContent = type;
+    document.getElementById('mbti-title').textContent = typeInfo.title;
+    document.getElementById('mbti-description').textContent = typeInfo.description;
+    
+    // Set rank badge
+    const rankBadge = document.querySelector('.rank-badge');
+    rankBadge.textContent = `${typeInfo.rank} Rank`;
+    rankBadge.className = `rank-badge rank-${typeInfo.rank} mb-6`;
+    
+    // Set strengths
+    const strengthsList = document.getElementById('strengths-list');
+    strengthsList.innerHTML = '';
+    typeInfo.strengths.forEach(strength => {
+      strengthsList.innerHTML += `
+        <li class="flex items-start gap-2">
+          <i class="ri-checkbox-circle-fill text-green-400 mt-1"></i>
+          <span>${strength}</span>
+        </li>
+      `;
+    });
+    
+    // Set weaknesses
+    const weaknessesList = document.getElementById('weaknesses-list');
+    weaknessesList.innerHTML = '';
+    typeInfo.weaknesses.forEach(weakness => {
+      weaknessesList.innerHTML += `
+        <li class="flex items-start gap-2">
+          <i class="ri-close-circle-fill text-red-400 mt-1"></i>
+          <span>${weakness}</span>
+        </li>
+      `;
+    });
+    
+    // Set compatibility
+    document.getElementById('compatibility-text').textContent = 
+      `You form the strongest bonds with ${typeInfo.compatibility.join(' and ')} types who complement your cosmic energy.`;
+    
+    const compatibilityContainer = document.querySelector('.flex.flex-wrap.justify-center.gap-4');
+    compatibilityContainer.innerHTML = '';
+    typeInfo.compatibility.forEach(compType => {
+      compatibilityContainer.innerHTML += `
+        <span class="px-4 py-2 bg-primary/20 rounded-full hover:bg-primary/30 transition-all">${compType}</span>
+      `;
+    });
+    
+    // Set mission
+    document.getElementById('mission-text').textContent = typeInfo.mission;
+    
+    // Animate mission completion
+    let progress = 0;
+    const missionBar = document.querySelector('.bg-primary');
+    const missionPercent = document.getElementById('mission-percent');
+    const missionInterval = setInterval(() => {
+      progress += 1;
+      missionBar.style.width = `${progress}%`;
+      missionPercent.textContent = progress;
+      
+      if (progress >= 85) {
+        clearInterval(missionInterval);
+      }
+    }, 20);
+    
+    // Set type icon (using first letter as emoji for simplicity)
+    const typeIcon = document.getElementById('type-icon');
+    const icons = {
+      'I': '🌌', 'E': '🚀',
+      'N': '🔮', 'S': '📡',
+      'F': '💖', 'T': '⚙️',
+      'P': '🌀', 'J': '📊'
+    };
+    typeIcon.textContent = icons[type[0]] + icons[type[1]] + icons[type[2]] + icons[type[3]];
+  }
+  
+  // Restart quiz
+  restartBtn.addEventListener('click', () => {
+    // Reset quiz state
+    currentQuestionIndex = 0;
+    answers = [];
+    startTime = new Date();
+    
+    // Reset UI
+    quizContainer.style.display = 'block';
+    resultContainer.style.display = 'none';
+    
+    // Restart timer
+    stopTimer();
+    startTimer();
+    
+    // Update display
+    updateQuestion();
+    updateProgressBar();
+    
+    // Scroll to top
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+  
+  // Add answer selection functionality
+  document.querySelectorAll('.answer-option').forEach(option => {
+    option.addEventListener('click', selectAnswer);
+  });
+  
+  // Add particle effects on click
+  document.addEventListener('click', function(e) {
+    createParticles(e.clientX, e.clientY);
+  });
+  
+  // Add touch support for mobile
+  document.addEventListener('touchstart', function(e) {
+    const touch = e.touches[0];
+    createParticles(touch.clientX, touch.clientY);
+  }, { passive: true });
+  
+  function createParticles(x, y) {
+    for (let i = 0; i < 5; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = `${x}px`;
+      particle.style.top = `${y}px`;
+      particle.style.width = `${Math.random() * 8 + 4}px`;
+      particle.style.height = particle.style.width;
+      particle.style.background = `rgba(87, 181, 231, ${Math.random() * 0.5 + 0.5})`;
+      particle.style.setProperty('--tx', `${(Math.random() - 0.5) * 100}px`);
+      particle.style.setProperty('--ty', `${(Math.random() - 0.5) * 100}px`);
+      document.body.appendChild(particle);
+      
+      // Remove particle after animation
+      setTimeout(() => {
+        particle.remove();
+      }, 1000);
+    }
+  }
+  
+  // Add 3D tilt effect
+  const tiltElements = document.querySelectorAll('.tilt-element');
+  tiltElements.forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const angleX = (y - centerY) / 20;
+      const angleY = (centerX - x) / 20;
+      
+      el.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg)`;
+    });
+    
+    el.addEventListener('mouseleave', () => {
+      el.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+    });
+  });
+  
+  // Initialize the quiz
+  initQuiz();
+});
+</script>
+</body>
+</html>

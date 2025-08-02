@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MBTI Superpower Universe</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<!-- GSAP for advanced animations -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<!-- Three.js for 3D elements -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+<!-- Lenis for buttery smooth scrolling -->
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#57B5E7',
+        secondary: '#8DD3C7'
+      },
+      borderRadius: {
+        'none': '0px',
+        'sm': '4px',
+        DEFAULT: '8px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '20px',
+        '2xl': '24px',
+        '3xl': '32px',
+        'full': '9999px',
+        'button': '8px'
+      },
+      fontFamily: {
+        'orbitron': ['Orbitron', 'monospace'],
+        'pacifico': ['Pacifico', 'serif']
+      }
+    }
+  }
+}
+</script>
+<style>
+:where([class^="ri-"])::before {
+  content: "\f3c2";
+}
+body {
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d1b69 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2357B5E7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4" fill="%2357B5E7"/></svg>'), auto;
+}
+.neon-glow {
+  box-shadow: 0 0 20px rgba(87, 181, 231, 0.5), 0 0 40px rgba(87, 181, 231, 0.3), 0 0 60px rgba(87, 181, 231, 0.1);
+}
+.neon-text {
+  text-shadow: 0 0 10px rgba(87, 181, 231, 0.8), 0 0 20px rgba(87, 181, 231, 0.6), 0 0 30px rgba(87, 181, 231, 0.4);
+}
+.hologram-card {
+  background: linear-gradient(135deg, rgba(87, 181, 231, 0.1) 0%, rgba(141, 211, 199, 0.1) 100%);
+  border: 1px solid rgba(87, 181, 231, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+.hologram-card:hover {
+  transform: translateY(-10px) rotateX(5deg) rotateY(5deg) scale(1.05);
+  box-shadow: 0 20px 40px rgba(87, 181, 231, 0.4), 0 0 60px rgba(87, 181, 231, 0.2);
+  border-color: rgba(87, 181, 231, 0.8);
+}
+.particle-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, rgba(87, 181, 231, 0.3), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(141, 211, 199, 0.3), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(251, 191, 114, 0.3), transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(252, 141, 98, 0.3), transparent);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: float 20s infinite linear;
+}
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(87, 181, 231, 0.5); }
+  50% { box-shadow: 0 0 30px rgba(87, 181, 231, 0.8), 0 0 40px rgba(87, 181, 231, 0.6); }
+}
+.pulse-button {
+  animation: pulse-glow 2s infinite;
+}
+.cosmic-bg {
+  background: radial-gradient(ellipse at center, rgba(87, 181, 231, 0.1) 0%, transparent 70%),
+    radial-gradient(ellipse at 80% 20%, rgba(141, 211, 199, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(251, 191, 114, 0.1) 0%, transparent 50%);
+}
+.parallax-element {
+  will-change: transform;
+}
+.hero-title span {
+  display: inline-block;
+}
+.animated-underline {
+  position: relative;
+}
+.animated-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #57B5E7, #8DD3C7);
+  transition: width 0.3s ease;
+}
+.animated-underline:hover::after {
+  width: 100%;
+}
+.type-card {
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.type-card:hover {
+  transform: translateY(-15px) scale(1.05);
+  box-shadow: 0 25px 50px rgba(87, 181, 231, 0.3);
+}
+.type-card img {
+  transition: transform 0.5s ease;
+}
+.type-card:hover img {
+  transform: scale(1.1) rotate(2deg);
+}
+.floating {
+  animation: floating 6s ease-in-out infinite;
+}
+@keyframes floating {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+.robot-avatar {
+  filter: drop-shadow(0 0 15px rgba(87, 181, 231, 0.7));
+}
+.energy-pulse {
+  position: relative;
+}
+.energy-pulse::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at center, rgba(87, 181, 231, 0.4) 0%, transparent 70%);
+  opacity: 0;
+  animation: pulse 3s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { opacity: 0.6; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+.neon-border {
+  position: relative;
+}
+.neon-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(45deg, #57B5E7, #8DD3C7, #57B5E7);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.neon-border:hover::before {
+  opacity: 1;
+}
+</style>
+</head>
+<body class="font-orbitron text-white">
+<!-- Floating particles background with Three.js -->
+<div id="particles-js" class="fixed inset-0 z-0"></div>
+
+<!-- Animated cursor trail -->
+<div id="cursor-trail" class="fixed w-4 h-4 rounded-full bg-primary/30 pointer-events-none z-50 transform -translate-x-1/2 -translate-y-1/2"></div>
+
+<nav class="fixed top-0 w-full z-50 bg-black/20 backdrop-blur-lg border-b border-primary/20">
+  <div class="max-w-7xl mx-auto px-6 py-4">
+    <div class="flex items-center justify-between">
+      <div class="text-2xl font-bold neon-text font-pacifico hover:scale-105 transition-transform">MBTI Universe</div>
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="#home" class="hover:text-primary transition-colors animated-underline">Home</a>
+        <a href="#universe" class="hover:text-primary transition-colors animated-underline">Universe</a>
+        <a href="#types" class="hover:text-primary transition-colors animated-underline">Types</a>
+        <a href="#quiz" class="hover:text-primary transition-colors animated-underline">Quiz</a>
+      </div>
+      <button class="md:hidden w-6 h-6 flex items-center justify-center hover:scale-110 transition-transform">
+        <i class="ri-menu-line text-xl"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- 3D Robot Avatar -->
+<div id="robot-container" class="fixed right-10 bottom-10 w-64 h-64 z-40 hidden md:block"></div>
+
+<section id="home" class="min-h-screen flex items-center justify-center relative cosmic-bg overflow-hidden">
+  <div class="absolute inset-0" style="background-image: url('https://readdy.ai/api/search-image?query=futuristic%20cosmic%20nebula%20with%20electric%20blue%20energy%20streams%20and%20floating%20geometric%20particles%20in%20deep%20space%2C%20holographic%20interface%20elements%2C%20cyberpunk%20aesthetic%2C%20neon%20glow%20effects%2C%20digital%20art%20style%2C%20high%20contrast%20lighting%2C%20ethereal%20atmosphere&width=1920&height=1080&seq=hero1&orientation=landscape'); background-size: cover; background-position: center; opacity: 0.3;"></div>
+  
+  <!-- Floating stars -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="absolute w-2 h-2 bg-white rounded-full" style="top: 15%; left: 20%; animation: twinkle 4s infinite;"></div>
+    <div class="absolute w-1 h-1 bg-primary rounded-full" style="top: 25%; left: 80%; animation: twinkle 3s infinite 1s;"></div>
+    <div class="absolute w-1.5 h-1.5 bg-secondary rounded-full" style="top: 70%; left: 30%; animation: twinkle 5s infinite 0.5s;"></div>
+    <div class="absolute w-1 h-1 bg-yellow-400 rounded-full" style="top: 60%; left: 60%; animation: twinkle 4s infinite 1.5s;"></div>
+  </div>
+  
+  <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+    <h1 class="text-6xl md:text-8xl font-black mb-6 neon-text leading-tight hero-title">
+      <span class="inline-block"> What's Your MBTI</span><br>
+      <span class="text-primary inline-block">Superpower?</span><br>
+      <span class="inline-block">Let's Find Out!</span>
+    </h1>
+    <p style="margin-top: 100px;" class="text-xl md:text-2xl mb-12  text-gray-300 max-w-2xl mx-auto leading-relaxed parallax-element">
+      Enter the MBTI Universe where every personality type is a unique superhero class.
+      Discover your cosmic powers and join your destined planet!
+    </p>
+    <button class="bg-gradient-to-r from-primary to-secondary px-12 py-6 rounded-button text-xl font-bold hover:scale-105 transition-all duration-300 pulse-button !rounded-button whitespace-nowrap neon-border energy-pulse">
+      <span class="flex items-center gap-3">
+        <i class="ri-rocket-line text-2xl"></i>
+        Start Your Journey
+      </span>
+    </button>
+  </div>
+  
+  <!-- Floating MBTI letters -->
+  <div class="absolute left-10 top-1/4 text-4xl text-primary opacity-30 floating" style="animation-delay: 0.2s;">I</div>
+  <div class="absolute right-20 top-1/3 text-5xl text-secondary opacity-30 floating" style="animation-delay: 0.4s;">E</div>
+  <div class="absolute left-1/4 bottom-1/3 text-3xl text-yellow-400 opacity-30 floating" style="animation-delay: 0.6s;">N</div>
+  <div class="absolute right-1/3 bottom-1/4 text-6xl text-pink-400 opacity-30 floating" style="animation-delay: 0.8s;">F</div>
+</section>
+
+<section id="universe" class="py-20 px-6 relative overflow-hidden">
+  <!-- Animated cosmic rings -->
+  <div class="absolute -left-40 top-1/4 w-80 h-80 border-2 border-primary/20 rounded-full animate-spin-slow" style="animation-duration: 40s;"></div>
+  <div class="absolute -right-40 bottom-1/4 w-96 h-96 border-2 border-secondary/20 rounded-full animate-spin-slow" style="animation-duration: 50s; animation-direction: reverse;"></div>
+  
+  <div class="max-w-7xl mx-auto relative">
+    <div class="text-center mb-16 parallax-element">
+      <h2 class="text-5xl font-black mb-6 neon-text">The MBTI Universe</h2>
+      <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+        Sixteen unique worlds, each home to a different superhero class.
+        Every personality type rules their own cosmic domain with distinct powers and abilities.
+      </p>
+    </div>
+    
+    <div class="grid md:grid-cols-3 gap-8 mb-16">
+      <div class="hologram-card rounded-2xl p-8 text-center transform transition-all duration-500 hover:rotate-y-180">
+        <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-primary/20 rounded-full neon-glow">
+          <i class="ri-brain-line text-3xl text-primary"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-4 text-primary">Mind Powers</h3>
+        <p class="text-gray-300">Each type possesses unique cognitive abilities that shape their approach to the universe</p>
+      </div>
+      <div class="hologram-card rounded-2xl p-8 text-center transform transition-all duration-500 hover:rotate-y-180">
+        <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-secondary/20 rounded-full neon-glow">
+          <i class="ri-planet-line text-3xl text-secondary"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-4 text-secondary">Cosmic Realms</h3>
+        <p class="text-gray-300">Sixteen distinct planets, each reflecting the essence and energy of its ruling personality type</p>
+      </div>
+      <div class="hologram-card rounded-2xl p-8 text-center transform transition-all duration-500 hover:rotate-y-180">
+        <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-yellow-400/20 rounded-full neon-glow">
+          <i class="ri-group-line text-3xl text-yellow-400"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-4 text-yellow-400">Hero Classes</h3>
+        <p class="text-gray-300">From strategic masterminds to charismatic leaders, find your place in the superhero hierarchy</p>
+      </div>
+    </div>
+    
+    <!-- Interactive galaxy map -->
+    <div class="hologram-card rounded-2xl p-8 text-center relative overflow-hidden h-96 flex items-center justify-center">
+      <div id="galaxy-map" class="absolute inset-0 flex items-center justify-center">
+        <div class="relative w-full h-full">
+          <!-- This will be populated by JS with interactive galaxy elements -->
+          <div class="absolute w-4 h-4 bg-primary rounded-full galaxy-node" style="top: 30%; left: 20%;" data-type="INTJ"></div>
+          <div class="absolute w-4 h-4 bg-yellow-400 rounded-full galaxy-node" style="top: 60%; left: 70%;" data-type="ENFP"></div>
+          <div class="absolute w-4 h-4 bg-secondary rounded-full galaxy-node" style="top: 40%; left: 50%;" data-type="INTP"></div>
+          <div class="galaxy-connector absolute bg-primary/20" style="width: 30%; height: 2px; top: 35%; left: 25%; transform: rotate(30deg);"></div>
+        </div>
+      </div>
+      <div class="relative z-10">
+        <h3 class="text-3xl font-bold mb-4 text-primary">Interactive Galaxy Map</h3>
+        <p class="text-gray-300 mb-6">Explore the connections between different personality types</p>
+        <button class="bg-primary/20 px-6 py-3 rounded-button text-primary font-medium hover:bg-primary/30 transition-colors neon-border">
+          Explore the Galaxy
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="types" class="py-20 px-6 relative overflow-hidden">
+  <!-- Floating particles -->
+  <div class="absolute inset-0">
+    <div class="particle" style="top: 10%; left: 15%;"></div>
+    <div class="particle" style="top: 25%; left: 80%;"></div>
+    <div class="particle" style="top: 70%; left: 30%;"></div>
+    <div class="particle" style="top: 60%; left: 60%;"></div>
+  </div>
+  
+  <div class="max-w-7xl mx-auto relative">
+    <div class="text-center mb-16 parallax-element">
+      <h2 class="text-5xl font-black mb-6 neon-text">Choose Your Hero Class</h2>
+      <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+        Explore the sixteen legendary personality types, each with their own superpowers,
+        home planet, and role in the cosmic balance.
+      </p>
+    </div>
+    
+    <div class="grid md:grid-cols-4 gap-6">
+      <div class="hologram-card rounded-2xl p-6 group cursor-pointer type-card neon-border">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden relative">
+          <img src="https://readdy.ai/api/search-image?query=futuristic%20strategic%20mastermind%20character%20with%20glowing%20blue%20neural%20networks%2C%20cyberpunk%20armor%20design%2C%20commanding%20presence%2C%20digital%20holographic%20effects%2C%20neon%20blue%20lighting%2C%20sci-fi%20superhero%20aesthetic&width=300&height=300&seq=intj1&orientation=squarish"
+            alt="INTJ Strategist" class="w-full h-full object-cover object-top">
+          <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-primary">INTJ</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Strategist</h4>
+          <p class="text-sm text-gray-400 mb-3">Master of long-term planning and systematic thinking</p>
+          <span class="text-xs text-primary font-medium">Planet Archon</span>
+        </div>
+      </div>
+      
+      <div class="hologram-card rounded-2xl p-6 group cursor-pointer type-card neon-border">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden relative">
+          <img src="https://readdy.ai/api/search-image?query=energetic%20charismatic%20superhero%20with%20bright%20golden%20aura%2C%20inspiring%20leader%20pose%2C%20dynamic%20energy%20effects%2C%20warm%20lighting%2C%20motivational%20presence%2C%20futuristic%20costume%20design&width=300&height=300&seq=enfp1&orientation=squarish"
+            alt="ENFP Firestarter" class="w-full h-full object-cover object-top">
+          <div class="absolute inset-0 bg-yellow-400/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-yellow-400">ENFP</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Firestarter</h4>
+          <p class="text-sm text-gray-400 mb-3">Ignites passion and creativity in others</p>
+          <span class="text-xs text-yellow-400 font-medium">Planet Inspiration</span>
+        </div>
+      </div>
+      
+      <div class="hologram-card rounded-2xl p-6 group cursor-pointer type-card neon-border">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden relative">
+          <img src="https://readdy.ai/api/search-image?query=logical%20analytical%20superhero%20with%20geometric%20patterns%2C%20precise%20technological%20armor%2C%20calculating%20expression%2C%20blue-green%20energy%20effects%2C%20systematic%20design%20elements&width=300&height=300&seq=intp1&orientation=squarish"
+            alt="INTP Architect" class="w-full h-full object-cover object-top">
+          <div class="absolute inset-0 bg-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-secondary">INTP</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Architect</h4>
+          <p class="text-sm text-gray-400 mb-3">Builds theoretical frameworks and innovative solutions</p>
+          <span class="text-xs text-secondary font-medium">Planet Logic</span>
+        </div>
+      </div>
+      
+      <div class="hologram-card rounded-2xl p-6 group cursor-pointer type-card neon-border">
+        <div class="aspect-square mb-4 rounded-xl overflow-hidden relative">
+          <img src="https://readdy.ai/api/search-image?query=commanding%20natural%20born%20leader%20superhero%20with%20regal%20presence%2C%20authoritative%20stance%2C%20golden%20crown%20elements%2C%20powerful%20aura%2C%20leadership%20symbolism%2C%20majestic%20design&width=300&height=300&seq=entj1&orientation=squarish"
+            alt="ENTJ Commander" class="w-full h-full object-cover object-top">
+          <div class="absolute inset-0 bg-orange-400/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        </div>
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2 text-orange-400">ENTJ</h3>
+          <h4 class="text-lg font-semibold mb-3 text-white">The Commander</h4>
+          <p class="text-sm text-gray-400 mb-3">Natural born leader with executive powers</p>
+          <span class="text-xs text-orange-400 font-medium">Planet Authority</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center mt-12">
+      <a href="discover.html" data-readdy="true">
+        <button class="bg-gradient-to-r from-primary to-secondary px-8 py-4 rounded-button text-lg font-bold hover:scale-105 transition-all duration-300 !rounded-button whitespace-nowrap neon-border energy-pulse">
+          Discover All 16 Types
+        </button>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="quiz" class="py-20 px-6 relative cosmic-bg overflow-hidden">
+  <div class="absolute inset-0" style="background-image: url('https://readdy.ai/api/search-image?query=cosmic%20portal%20gateway%20with%20swirling%20energy%20vortex%2C%20mystical%20blue%20and%20purple%20nebula%2C%20dimensional%20gateway%2C%20futuristic%20architecture%2C%20ethereal%20lighting%20effects%2C%20space-time%20continuum%20visualization&width=1920&height=1080&seq=cta1&orientation=landscape'); background-size: cover; background-position: center; opacity: 0.2;"></div>
+  
+  <!-- Animated portal effect -->
+  <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full border-4 border-primary/30 animate-spin" style="animation-duration: 20s;"></div>
+  <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full border-4 border-secondary/30 animate-spin" style="animation-duration: 30s; animation-direction: reverse;"></div>
+  
+  <div class="relative z-10 max-w-4xl mx-auto text-center">
+    <h2 class="text-5xl font-black mb-6 neon-text">Begin Your Cosmic Journey</h2>
+    <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+      Ready to discover your MBTI superpower? Take our immersive quiz and unlock your
+      true personality type. Your cosmic destiny awaits!
+    </p>
+    
+    <div class="hologram-card rounded-3xl p-12 mb-12 neon-border">
+      <div class="grid md:grid-cols-3 gap-8 mb-8">
+        <div class="text-center">
+          <div class="text-4xl font-black text-primary mb-2 count-up" data-target="15">0</div>
+          <div class="text-gray-400">Questions</div>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl font-black text-secondary mb-2 count-up" data-target="15">0</div>
+          <div class="text-gray-400">Minutes</div>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl font-black text-yellow-400 mb-2 count-up" data-target="16">0</div>
+          <div class="text-gray-400">Possible Results</div>
+        </div>
+      </div>
+      <a href="quiz.html" data-readdy="true">
+        <button class="bg-gradient-to-r from-primary to-secondary px-16 py-6 rounded-button text-2xl font-bold hover:scale-105 transition-all duration-300 pulse-button !rounded-button whitespace-nowrap neon-border energy-pulse">
+          <span class="flex items-center gap-4">
+            <i class="ri-flashlight-line text-3xl"></i>
+            Start Quiz Now
+          </span>
+        </button>
+      </a>
+    </div>
+    
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="hologram-card rounded-2xl p-6 text-left hover:rotate-x-5 hover:rotate-y-5 transition-transform">
+        <div class="w-12 h-12 mb-4 flex items-center justify-center bg-primary/20 rounded-full neon-glow">
+          <i class="ri-shield-check-line text-2xl text-primary"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-3">Scientifically Accurate</h3>
+        <p class="text-gray-400">Based on Carl Jung's psychological types and validated MBTI research</p>
+      </div>
+      <div class="hologram-card rounded-2xl p-6 text-left hover:rotate-x-5 hover:rotate-y-5 transition-transform">
+        <div class="w-12 h-12 mb-4 flex items-center justify-center bg-secondary/20 rounded-full neon-glow">
+          <i class="ri-magic-line text-2xl text-secondary"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-3">Immersive Experience</h3>
+        <p class="text-gray-400">Interactive storytelling that makes personality discovery engaging and fun</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="py-16 px-6 bg-black/40 backdrop-blur-lg border-t border-primary/20 relative overflow-hidden">
+  <!-- Floating footer particles -->
+  <div class="absolute inset-0">
+    <div class="particle" style="top: 10%; left: 15%;"></div>
+    <div class="particle" style="top: 25%; left: 80%;"></div>
+  </div>
+  
+  <div class="max-w-7xl mx-auto relative">
+    <div class="grid md:grid-cols-4 gap-8 mb-12">
+      <div>
+        <div class="text-2xl font-bold neon-text font-pacifico mb-4">MBTI Universe</div>
+        <p class="text-gray-400 mb-4">Discover your cosmic personality and join the superhero universe where every type has its own unique powers.</p>
+        <div class="flex space-x-4">
+          <div class="w-10 h-10 flex items-center justify-center bg-primary/20 rounded-full hover:bg-primary/30 transition-colors cursor-pointer neon-glow">
+            <i class="ri-twitter-line text-primary"></i>
+          </div>
+          <div class="w-10 h-10 flex items-center justify-center bg-primary/20 rounded-full hover:bg-primary/30 transition-colors cursor-pointer neon-glow">
+            <i class="ri-instagram-line text-primary"></i>
+          </div>
+          <div class="w-10 h-10 flex items-center justify-center bg-primary/20 rounded-full hover:bg-primary/30 transition-colors cursor-pointer neon-glow">
+            <i class="ri-facebook-line text-primary"></i>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h4 class="text-lg font-bold mb-4 text-primary">Explore</h4>
+        <ul class="space-y-2 text-gray-400">
+          <li><a href="#" class="hover:text-primary transition-colors animated-underline">All 16 Types</a></li>
+          <li><a href="#" class="hover:text-primary transition-colors animated-underline">Personality Quiz</a></li>
+          <li><a href="#" class="hover:text-primary transition-colors animated-underline">Type Compatibility</a></li>
+          <li><a href="#" class="hover:text-primary transition-colors animated-underline">Career Paths</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-lg font-bold mb-4 text-secondary">Resources</h4>
+        <ul class="space-y-2 text-gray-400">
+          <li><a href="#" class="hover:text-secondary transition-colors animated-underline">MBTI Guide</a></li>
+          <li><a href="#" class="hover:text-secondary transition-colors animated-underline">Type Descriptions</a></li>
+          <li><a href="#" class="hover:text-secondary transition-colors animated-underline">Research Papers</a></li>
+          <li><a href="#" class="hover:text-secondary transition-colors animated-underline">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-lg font-bold mb-4 text-yellow-400">Community</h4>
+        <ul class="space-y-2 text-gray-400">
+          <li><a href="#" class="hover:text-yellow-400 transition-colors animated-underline">Discussion Forum</a></li>
+          <li><a href="#" class="hover:text-yellow-400 transition-colors animated-underline">Type Groups</a></li>
+          <li><a href="#" class="hover:text-yellow-400 transition-colors animated-underline">Events</a></li>
+          <li><a href="#" class="hover:text-yellow-400 transition-colors animated-underline">Newsletter</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-primary/20 pt-8 text-center text-gray-400">
+      <p>&copy; 2025 MBTI Universe. All rights reserved. Discover your cosmic superpower today.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Initialize smooth scrolling with Lenis
+const lenis = new Lenis({
+  lerp: 0.1,
+  smooth: true,
+  direction: 'vertical',
+})
+
+function raf(time) {
+  lenis.raf(time)
+  requestAnimationFrame(raf)
+}
+
+requestAnimationFrame(raf)
+
+// GSAP animations
+document.addEventListener('DOMContentLoaded', function() {
+  // Animate hero title
+  gsap.from('.hero-title span', {
+    duration: 1,
+    y: 50,
+    opacity: 0,
+    stagger: 0.2,
+    ease: 'power3.out'
+  })
+  
+  // Animate cards on scroll
+  gsap.utils.toArray('.hologram-card').forEach(card => {
+    gsap.from(card, {
+      scrollTrigger: {
+        trigger: card,
+        start: 'top 80%',
+        toggleActions: 'play none none none'
+      },
+      y: 50,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'back.out(1)'
+    })
+  })
+  
+  // Count up animation for quiz stats
+  gsap.utils.toArray('.count-up').forEach(element => {
+    const target = parseInt(element.getAttribute('data-target'))
+    const duration = 2
+    
+    gsap.to(element, {
+      scrollTrigger: {
+        trigger: element,
+        start: 'top 80%',
+        toggleActions: 'play none none none'
+      },
+      innerText: target,
+      duration: duration,
+      snap: { innerText: 1 },
+      modifiers: {
+        innerText: function(innerText) {
+          return Math.floor(parseInt(innerText))
+        }
+      }
+    })
+  })
+  
+  // Parallax effects
+  gsap.utils.toArray('.parallax-element').forEach(el => {
+    gsap.to(el, {
+      scrollTrigger: {
+        trigger: el,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true
+      },
+      y: (i, target) => -ScrollTrigger.maxScroll(window) * 0.1,
+      ease: 'none'
+    })
+  })
+})
+
+// 3D Robot Avatar with Three.js
+function initRobot() {
+  const container = document.getElementById('robot-container')
+  if (!container) return
+  
+  const width = container.clientWidth
+  const height = container.clientHeight
+  
+  // Create scene
+  const scene = new THREE.Scene()
+  scene.background = null
+  
+  // Create camera
+  const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
+  camera.position.z = 5
+  
+  // Create renderer
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
+  renderer.setSize(width, height)
+  container.appendChild(renderer.domElement)
+  
+  // Add lights
+  const ambientLight = new THREE.AmbientLight(0x57B5E7, 0.5)
+  scene.add(ambientLight)
+  
+  const directionalLight = new THREE.DirectionalLight(0x8DD3C7, 0.8)
+  directionalLight.position.set(1, 1, 1)
+  scene.add(directionalLight)
+  
+  // Create robot head (simple representation)
+  const geometry = new THREE.SphereGeometry(1, 32, 32)
+  const material = new THREE.MeshPhongMaterial({
+    color: 0x57B5E7,
+    emissive: 0x57B5E7,
+    emissiveIntensity: 0.2,
+    shininess: 100
+  })
+  const head = new THREE.Mesh(geometry, material)
+  scene.add(head)
+  
+  // Add eyes
+  const eyeGeometry = new THREE.SphereGeometry(0.15, 16, 16)
+  const eyeMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff })
+  
+  const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial)
+  leftEye.position.set(-0.3, 0.2, 0.9)
+  head.add(leftEye)
+  
+  const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial)
+  rightEye.position.set(0.3, 0.2, 0.9)
+  head.add(rightEye)
+  
+  // Add antenna
+  const antennaGeometry = new THREE.CylinderGeometry(0.03, 0.03, 0.5, 8)
+  const antennaMaterial = new THREE.MeshPhongMaterial({ color: 0x57B5E7 })
+  const antenna = new THREE.Mesh(antennaGeometry, antennaMaterial)
+  antenna.position.set(0, 0.8, 0)
+  antenna.rotation.x = Math.PI / 4
+  head.add(antenna)
+  
+  // Animation
+  function animate() {
+    requestAnimationFrame(animate)
+    
+    // Gentle bobbing motion
+    head.position.y = Math.sin(Date.now() * 0.001) * 0.1
+    head.rotation.y = Date.now() * 0.0005
+    
+    renderer.render(scene, camera)
+  }
+  
+  animate()
+  
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight
+    camera.updateProjectionMatrix()
+    renderer.setSize(container.clientWidth, container.clientHeight)
+  })
+}
+
+// Initialize robot if container exists
+if (document.getElementById('robot-container')) {
+  initRobot()
+}
+
+// Particle background
+function initParticles() {
+  const container = document.getElementById('particles-js')
+  if (!container) return
+  
+  const scene = new THREE.Scene()
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+  const renderer = new THREE.WebGLRenderer({ alpha: true })
+  renderer.setSize(window.innerWidth, window.innerHeight)
+  container.appendChild(renderer.domElement)
+  
+  // Create particles
+  const particlesGeometry = new THREE.BufferGeometry()
+  const particleCount = 500
+  
+  const posArray = new Float32Array(particleCount * 3)
+  
+  for (let i = 0; i < particleCount * 3; i++) {
+    posArray[i] = (Math.random() - 0.5) * 10
+  }
+  
+  particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3))
+  
+  const particlesMaterial = new THREE.PointsMaterial({
+    size: 0.02,
+    color: 0x57B5E7,
+    transparent: true,
+    opacity: 0.8,
+    blending: THREE.AdditiveBlending
+  })
+  
+  const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial)
+  scene.add(particlesMesh)
+  
+  camera.position.z = 3
+  
+  // Animation
+  function animate() {
+    requestAnimationFrame(animate)
+    
+    particlesMesh.rotation.x += 0.0001
+    particlesMesh.rotation.y += 0.0001
+    
+    renderer.render(scene, camera)
+  }
+  
+  animate()
+  
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
+    renderer.setSize(window.innerWidth, window.innerHeight)
+  })
+}
+
+// Initialize particles
+initParticles()
+
+// Custom cursor trail
+document.addEventListener('DOMContentLoaded', function() {
+  const cursor = document.getElementById('cursor-trail')
+  if (!cursor) return
+  
+  let mouseX = 0
+  let mouseY = 0
+  let cursorX = 0
+  let cursorY = 0
+  
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX
+    mouseY = e.clientY
+  })
+  
+  function animateCursor() {
+    cursorX += (mouseX - cursorX) / 8
+    cursorY += (mouseY - cursorY) / 8
+    
+    cursor.style.left = cursorX + 'px'
+    cursor.style.top = cursorY + 'px'
+    
+    requestAnimationFrame(animateCursor)
+  }
+  
+  animateCursor()
+  
+  // Interactive elements cursor effect
+  const interactiveElements = document.querySelectorAll('a, button, .hologram-card, .type-card')
+  interactiveElements.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%, -50%) scale(2)'
+      cursor.style.backgroundColor = 'rgba(87, 181, 231, 0.5)'
+    })
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%, -50%) scale(1)'
+      cursor.style.backgroundColor = 'rgba(87, 181, 231, 0.3)'
+    })
+  })
+})
+
+// Mobile menu
+document.addEventListener('DOMContentLoaded', function() {
+  const menuButton = document.querySelector('.md\\:hidden button')
+  if (!menuButton) return
+  
+  const mobileMenu = document.createElement('div')
+  mobileMenu.className = 'fixed inset-0 bg-black/90 backdrop-blur-lg z-40 hidden flex items-center justify-center'
+  mobileMenu.innerHTML = `
+    <div class="flex flex-col items-center justify-center h-full space-y-8 text-2xl">
+      <a href="#home" class="hover:text-primary transition-colors transform hover:scale-110">Home</a>
+      <a href="#universe" class="hover:text-primary transition-colors transform hover:scale-110">Universe</a>
+      <a href="#types" class="hover:text-primary transition-colors transform hover:scale-110">Types</a>
+      <a href="#quiz" class="hover:text-primary transition-colors transform hover:scale-110">Quiz</a>
+    </div>
+    <button class="absolute top-6 right-6 text-2xl">
+      <i class="ri-close-line"></i>
+    </button>
+  `
+  document.body.appendChild(mobileMenu)
+  
+  menuButton.addEventListener('click', function() {
+    mobileMenu.classList.remove('hidden')
+    gsap.from(mobileMenu.querySelectorAll('a'), {
+      y: 20,
+      opacity: 0,
+      stagger: 0.1,
+      duration: 0.5
+    })
+  })
+  
+  mobileMenu.querySelector('button').addEventListener('click', function() {
+    mobileMenu.classList.add('hidden')
+  })
+  
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', function() {
+      mobileMenu.classList.add('hidden')
+    })
+  })
+})
+
+// Galaxy map interaction
+document.addEventListener('DOMContentLoaded', function() {
+  const galaxyNodes = document.querySelectorAll('.galaxy-node')
+  galaxyNodes.forEach(node => {
+    node.addEventListener('mouseenter', function() {
+      const type = this.getAttribute('data-type')
+      gsap.to(this, {
+        scale: 1.5,
+        duration: 0.3,
+        ease: 'power2.out'
+      })
+      
+      // Create tooltip
+      const tooltip = document.createElement('div')
+      tooltip.className = 'absolute bg-black/80 backdrop-blur-sm px-3 py-2 rounded-md text-sm whitespace-nowrap z-50'
+      tooltip.textContent = type
+      tooltip.style.top = `${this.offsetTop - 30}px`
+      tooltip.style.left = `${this.offsetLeft}px`
+      this.parentNode.appendChild(tooltip)
+      
+      this.tooltip = tooltip
+    })
+    
+    node.addEventListener('mouseleave', function() {
+      gsap.to(this, {
+        scale: 1,
+        duration: 0.3,
+        ease: 'power2.out'
+      })
+      
+      if (this.tooltip) {
+        this.tooltip.remove()
+      }
+    })
+  })
+})
+</script>
+</body>
+</html>
